@@ -189,14 +189,21 @@ body {
 /* ═══════════════════════════════════════
    PAGE TRANSITIONS
 ═══════════════════════════════════════ */
+
+/* Block ALL transitions on load until JS is ready */
+body.loading .page {
+  transition: none !important;
+}
+
 .page {
   position: absolute;
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(12px) scale(0.99);
-  transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1),
-              transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  transform: translateY(16px) scale(0.985);
+  transition: opacity 0.45s cubic-bezier(0.4,0,0.2,1),
+              transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  will-change: opacity, transform;
 }
 .page.active {
   opacity: 1;
@@ -860,7 +867,7 @@ select option { background:#0b0f18; color:var(--text); }
 }
 </style>
 </head>
-<body>
+<body class="loading on-home">
 
 <canvas id="bg-canvas"></canvas>
 <div id="page-wipe"></div>
@@ -895,7 +902,7 @@ select option { background:#0b0f18; color:var(--text); }
 <div id="main">
 
   <!-- ─── HOME / LANDING ─── -->
-  <div class="page active" id="page-home">
+  <div class="page" id="page-home">
     <!-- corner ornaments -->
     <div class="home-corner home-corner-tl"></div>
     <div class="home-corner home-corner-tr"></div>
@@ -933,7 +940,7 @@ select option { background:#0b0f18; color:var(--text); }
   </div>
 
   <!-- ─── FICHA ─── -->
-  <div class="page active" id="page-ficha">
+  <div class="page" id="page-ficha">
     <div class="sheet-wrapper">
       <div class="ficha-header">
         <div class="ficha-title">Ficha de Personagem</div>
@@ -1784,9 +1791,19 @@ document.getElementById('reset-btn').addEventListener('click',()=>{
 
 // ── INIT ──
 treeResize();
-// Set home tab active on load
-document.querySelector('.nav-tab[data-page="home"]')?.classList.add('active');
-document.body.classList.add('on-home');
+
+// Set initial state instantly (no transition)
+// body already has .loading class — transitions are suppressed
+document.getElementById('page-home').classList.add('active');
+document.querySelector('.nav-tab[data-page="home"]').classList.add('active');
+// currentPage and on-home already set at top / on body tag
+
+// After two frames, enable transitions
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    document.body.classList.remove('loading');
+  });
+});
 </script>
 </body>
 </html>
