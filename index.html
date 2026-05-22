@@ -866,6 +866,8 @@ select option { background:#0b0f18; color:var(--text); }
   .print-btn { display:none; }
 }
 </style>
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/extras.css">
 </head>
 <body class="loading on-home">
 
@@ -883,18 +885,25 @@ select option { background:#0b0f18; color:var(--text); }
 
   <nav id="nav-tabs">
     <div class="nav-tab" data-page="home">Início</div>
+    <div class="nav-tab" data-page="regras">Regras</div>
+    <div class="nav-tab" data-page="classes">Classes</div>
+    <div class="nav-tab" data-page="magias">Magias</div>
+    <div class="nav-tab" data-page="bestiario">Bestiário</div>
+    <div class="nav-tab" data-page="lore">Lore</div>
     <div class="nav-tab" data-page="ficha">Ficha</div>
-    <div class="nav-tab" data-page="arvore">Árvore de Habilidades</div>
-    <div class="nav-tab" data-page="magias">Magias <span class="badge">em breve</span></div>
-    <div class="nav-tab" data-page="bestiario">Bestiário <span class="badge">em breve</span></div>
-    <div class="nav-tab" data-page="regras">Regras <span class="badge">em breve</span></div>
+    <div class="nav-tab" data-page="arvore">Árvore</div>
   </nav>
 
   <div id="header-right">
-    <div class="hdr-stat">
-      <span class="lbl">Pontos</span>
-      <span class="val" id="hdr-pts">5</span>
-    </div>
+    <button id="global-search-btn" class="ref-card-btn" title="Busca global (Ctrl+K)">
+      <span class="rcb-glyph">⌕</span>
+      <span class="rcb-label">Buscar</span>
+      <span class="rcb-kbd">Ctrl+K</span>
+    </button>
+    <button id="ref-card-btn" class="ref-card-btn" title="Cartão de Referência rápida">
+      <span class="rcb-glyph">☰</span>
+      <span class="rcb-label">Referência</span>
+    </button>
   </div>
 </header>
 
@@ -922,11 +931,11 @@ select option { background:#0b0f18; color:var(--text); }
       </div>
 
       <div class="home-buttons">
-        <button class="home-btn home-btn-primary" data-goto="ficha">
-          <span class="home-btn-icon">◈</span>Ficha de Personagem
+        <button class="home-btn home-btn-primary" data-goto="regras">
+          <span class="home-btn-icon">◈</span>Conhecer as Regras
         </button>
-        <button class="home-btn home-btn-secondary" data-goto="arvore">
-          <span class="home-btn-icon">✦</span>Árvore de Habilidades
+        <button class="home-btn home-btn-secondary" data-goto="ficha">
+          <span class="home-btn-icon">✦</span>Ficha de Personagem
         </button>
       </div>
 
@@ -1163,8 +1172,8 @@ select option { background:#0b0f18; color:var(--text); }
         <div class="class-tab" data-class="arqueiro">Arqueiro</div>
         <div class="class-tab" data-class="mago">Mago</div>
         <div id="pts-panel" style="margin-left:auto;">
-          <div class="pl">Pontos Disponíveis</div>
-          <div class="pv" id="pts-display">5</div>
+          <div class="pl">Pontos Gastos</div>
+          <div class="pv" id="pts-display">0</div>
         </div>
       </div>
       <div id="tree-bottom">
@@ -1174,34 +1183,20 @@ select option { background:#0b0f18; color:var(--text); }
     </div>
   </div>
 
-  <!-- ─── COMING SOON PAGES ─── -->
-  <div class="page" id="page-magias">
-    <div class="page-placeholder">
-      <div class="ph-icon">✦</div>
-      <div class="ph-line"></div>
-      <h2>Magias</h2>
-      <p>Catálogo de feitiços — em desenvolvimento</p>
-      <div class="ph-line"></div>
-    </div>
-  </div>
-  <div class="page" id="page-bestiario">
-    <div class="page-placeholder">
-      <div class="ph-icon">☠</div>
-      <div class="ph-line"></div>
-      <h2>Bestiário</h2>
-      <p>Criaturas e inimigos — em desenvolvimento</p>
-      <div class="ph-line"></div>
-    </div>
-  </div>
-  <div class="page" id="page-regras">
-    <div class="page-placeholder">
-      <div class="ph-icon">◈</div>
-      <div class="ph-line"></div>
-      <h2>Regras</h2>
-      <p>Núcleo do sistema — em desenvolvimento</p>
-      <div class="ph-line"></div>
-    </div>
-  </div>
+  <!-- ─── REGRAS ─── -->
+  <div class="page" id="page-regras"></div>
+
+  <!-- ─── CLASSES ─── -->
+  <div class="page" id="page-classes"></div>
+
+  <!-- ─── MAGIAS ─── -->
+  <div class="page" id="page-magias"></div>
+
+  <!-- ─── BESTIÁRIO ─── -->
+  <div class="page" id="page-bestiario"></div>
+
+  <!-- ─── LORE ─── -->
+  <div class="page" id="page-lore"></div>
 
 </div><!-- #main -->
 
@@ -1257,7 +1252,6 @@ const wipe = document.getElementById('page-wipe');
 
 function navigateTo(pg) {
   if (pg === currentPage) return;
-
   // Nav sound
   try {
     const ac = getAudio(), now = ac.currentTime, out = masterGain(ac);
@@ -1288,6 +1282,8 @@ function navigateTo(pg) {
     if (pg === 'arvore') treeResize();
     // toggle home class for header transparency
     document.body.classList.toggle('on-home', pg === 'home');
+    // toggle tree class so floating dice doesn't collide with tree-bottom bar
+    document.body.classList.toggle('tree-active', pg === 'arvore');
 
     // Fade wipe out
     wipe.classList.remove('flash');
@@ -1365,8 +1361,7 @@ function addTag(e,cId,iId){
 // sync points ficha ↔ tree header
 function syncPts(val){
   totalPoints = parseInt(val)||0;
-  document.getElementById('pts-display').textContent = Math.max(0, totalPoints - usedPoints);
-  document.getElementById('hdr-pts').textContent = Math.max(0, totalPoints - usedPoints);
+  // header badge removed; tree now shows used points (no cap) — nothing to sync
 }
 
 // ── PERÍCIAS ──
@@ -1563,7 +1558,8 @@ canvas.addEventListener('wheel',e=>{
   e.preventDefault();
   const f=e.deltaY<0?1.1:0.91;
   const nz=Math.min(MAX_ZOOM,Math.max(MIN_ZOOM,cam.zoom*f));
-  const mx=e.clientX-W/2,my=e.clientY-H/2;
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)-W/2,my=(e.clientY-rect.top)-H/2;
   cam.x=mx-(mx-cam.x)*(nz/cam.zoom);cam.y=my-(my-cam.y)*(nz/cam.zoom);cam.zoom=nz;draw();
 },{passive:false});
 let touches=[];
@@ -1698,7 +1694,9 @@ requestAnimationFrame(animLoop);
 const tooltip=document.getElementById('tooltip');
 function getHoveredNode(mx,my){
   if(currentPage!=='arvore')return null;
-  const w=s2w(mx,my),visIds=new Set(NODES.filter(n=>activeFilter==='all'||n.cls==='all'||n.cls===activeFilter).map(n=>n.id));
+  const rect=canvas.getBoundingClientRect();
+  const cx=mx-rect.left, cy=my-rect.top;
+  const w=s2w(cx,cy),visIds=new Set(NODES.filter(n=>activeFilter==='all'||n.cls==='all'||n.cls===activeFilter).map(n=>n.id));
   let best=null,bestDist=Infinity;
   NODES.forEach(n=>{if(!visIds.has(n.id))return;const r=nodeRadius(n)+6,dist=Math.hypot(n.x-w.x,n.y-w.y);if(dist<r&&dist<bestDist){best=n;bestDist=dist;}});
   return best;
@@ -1756,16 +1754,13 @@ canvas.addEventListener('click',e=>{
     n.active=false;usedPoints-=n.cost;soundDeactivate();
     const ss=w2s(n.x,n.y);spawnParticles(ss.x,ss.y,'#556677','#aabbcc',10);
   } else if(!n.active&&isAvailable(n)){
-    if(usedPoints+n.cost>totalPoints){soundError();return;}
     n.active=true;usedPoints+=n.cost;
     if(n.type==='keystone')soundKeystone();else soundActivate(n.type);
     const pe=EDGES.find(ed=>ed[1]===n.id&&nodeMap[ed[0]]?.active);
     if(pe){spawnBeam(nodeMap[pe[0]],n);soundBeam(0.38);}
     else{const ss=w2s(n.x,n.y);spawnParticles(ss.x,ss.y,getNodeColor(n),getNodeGlow(n),n.type==='keystone'?38:32);}
   } else if(!n.active&&!isAvailable(n)){soundError();}
-  const rem=Math.max(0,totalPoints-usedPoints);
-  document.getElementById('pts-display').textContent=rem;
-  document.getElementById('hdr-pts').textContent=rem;
+  document.getElementById('pts-display').textContent=usedPoints;
   handleHoverWithSound(e);draw();
 });
 
@@ -1783,9 +1778,7 @@ document.querySelectorAll('.class-tab').forEach(tab=>{
 // ── RESET ──
 document.getElementById('reset-btn').addEventListener('click',()=>{
   NODES.forEach(n=>{n.active=(n.cost===0);});usedPoints=0;
-  const rem=totalPoints;
-  document.getElementById('pts-display').textContent=rem;
-  document.getElementById('hdr-pts').textContent=rem;
+  document.getElementById('pts-display').textContent=0;
   tooltip.style.display='none';soundReset();draw();
 });
 
@@ -1804,6 +1797,31 @@ requestAnimationFrame(() => {
     document.body.classList.remove('loading');
   });
 });
+</script>
+
+<!-- ══ CONTENT DATA & RENDERERS ══ -->
+<script src="data/rules.js"></script>
+<script src="data/classes.js"></script>
+<script src="data/spells.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/dice-roller.js"></script>
+<script src="js/reference-card.js"></script>
+<script src="js/search.js"></script>
+<script>
+  // Initialize all content pages after data + renderers load
+  if (window.initContentPages) window.initContentPages();
+  // Build search index
+  if (window.refreshSearchIndex) window.refreshSearchIndex();
+  // Wire up reference card button
+  const refBtn = document.getElementById('ref-card-btn');
+  if (refBtn && window.openReferenceCard) {
+    refBtn.addEventListener('click', () => window.openReferenceCard());
+  }
+  // Wire up global search button
+  const sBtn = document.getElementById('global-search-btn');
+  if (sBtn && window.__openSearch) {
+    sBtn.addEventListener('click', () => window.__openSearch());
+  }
 </script>
 </body>
 </html>
