@@ -274,7 +274,7 @@ function renderClasses() {
       <div class="classes-header">
         <div class="ficha-title">Classes & Vocações</div>
         <hr class="ficha-divider">
-        <p class="classes-lead">A Classe define como sua vontade inabalável se manifesta no presente. Ao Nível 20, com base nas habilidades escolhidas, sua alma evolui para uma <em>Segunda Classe</em>.</p>
+        <p class="classes-lead">A Classe define como a sua vontade inabalável se manifesta no presente. Ao Nível 20, com base nas habilidades escolhidas, a sua alma evolui para uma <em>Segunda Classe</em>.</p>
       </div>
       <div class="class-tabs-row">
         ${classes.map((c, i) => `
@@ -468,7 +468,7 @@ function updateSpellGrid() {
       <div class="spell-group-header"><span class="sg-num">${romanize(g.circle)}</span><span class="sg-label">${g.circle}º Círculo</span><span class="sg-count">${g.items.length}</span></div>
       <div class="spell-cards">${g.items.map(spellCardHTML).join('')}</div>
     </div>
-  `).join('') || `<div class="no-results">Nenhuma magia encontrada com esses filtros.</div>`;
+  `).join('') || `<div class="no-results">Nenhuma magia encontrada com estes filtros.</div>`;
 
   grid.querySelectorAll('.spell-card').forEach(card => {
     card.addEventListener('click', () => openSpell(card.dataset.name));
@@ -672,6 +672,6 @@ window.initContentPages = function() {
   renderClasses();
   renderMagias();
   renderBestiario();
-  renderItens();  // <-- Chamando a nova aba aqui!
+  renderItens();  // <-- A renderizar a aba de Itens!
   renderLore();
 };
