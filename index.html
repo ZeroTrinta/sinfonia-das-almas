@@ -1011,7 +1011,6 @@ select option { background:#0b0f18; color:var(--text); }
 <canvas id="bg-canvas"></canvas>
 <div id="page-wipe"></div>
 
-<!-- ══ SITE HEADER ══ -->
 <header id="site-header">
   <div class="site-logo">
     <span class="hrt">♥</span>
@@ -1021,12 +1020,15 @@ select option { background:#0b0f18; color:var(--text); }
   <div class="header-divider"></div>
 
   <nav id="nav-tabs">
-  <div class="page" id="page-regras"></div>
-  <div class="page" id="page-classes"></div>
-  <div class="page" id="page-magias"></div>
-  <div class="page" id="page-itens"></div>
-  <div class="page" id="page-bestiario"></div>
-  <div class="page" id="page-lore"></div>
+    <div class="nav-tab" data-page="home">Início</div>
+    <div class="nav-tab" data-page="regras">Regras</div>
+    <div class="nav-tab" data-page="classes">Classes</div>
+    <div class="nav-tab" data-page="magias">Magias</div>
+    <div class="nav-tab" data-page="itens">Itens</div>
+    <div class="nav-tab" data-page="bestiario">Bestiário</div>
+    <div class="nav-tab" data-page="lore">Lore</div>
+    <div class="nav-tab" data-page="ficha">Ficha</div>
+    <div class="nav-tab" data-page="arvore">Árvore</div>
   </nav>
 
   <div id="header-right">
@@ -1042,12 +1044,9 @@ select option { background:#0b0f18; color:var(--text); }
   </div>
 </header>
 
-<!-- ══ MAIN ══ -->
 <div id="main">
 
-  <!-- ─── HOME / LANDING ─── -->
   <div class="page" id="page-home">
-    <!-- corner ornaments -->
     <div class="home-corner home-corner-tl"></div>
     <div class="home-corner home-corner-tr"></div>
     <div class="home-corner home-corner-bl"></div>
@@ -1105,7 +1104,6 @@ select option { background:#0b0f18; color:var(--text); }
     <div class="home-version">v0.3.1 · Sinfonia das Almas</div>
   </div>
 
-  <!-- ─── FICHA ─── -->
   <div class="page" id="page-ficha">
     <div class="sheet-wrapper">
       <div class="ficha-header">
@@ -1115,7 +1113,6 @@ select option { background:#0b0f18; color:var(--text); }
 
       <button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>
 
-      <!-- IDENTIDADE -->
       <div class="panel">
         <div class="panel-title">Identidade</div>
         <div class="identity-grid">
@@ -1152,7 +1149,6 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- ATRIBUTOS -->
       <div class="panel">
         <div class="panel-title">Atributos</div>
         <div class="attributes-grid">
@@ -1179,7 +1175,6 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- STATUS + COMBATE -->
       <div class="two-col">
         <div class="panel">
           <div class="panel-title">Status Vitais</div>
@@ -1205,7 +1200,6 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- ALMA -->
       <div class="panel">
         <div class="panel-title">Eixo da Alma</div>
         <div class="soul-grid">
@@ -1244,7 +1238,6 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- QUAL / DEF / ORIGENS -->
       <div class="three-col">
         <div class="panel">
           <div class="panel-title" style="color:#80e8f8;">Qualidades</div>
@@ -1269,13 +1262,11 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- PERÍCIAS -->
       <div class="panel">
         <div class="panel-title">Perícias</div>
         <div class="pericias-grid" id="pericias-grid"></div>
       </div>
 
-      <!-- HABILIDADES + MAGIAS -->
       <div class="two-col">
         <div class="panel">
           <div class="panel-title">Habilidades de Classe</div>
@@ -1287,13 +1278,11 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- INVENTÁRIO -->
       <div class="panel">
         <div class="panel-title">Inventário</div>
         <div class="inv-grid" id="inv-grid"></div>
       </div>
 
-      <!-- EQUIPAMENTO -->
       <div class="panel">
         <div class="panel-title">Equipamento</div>
         <div class="two-col">
@@ -1308,7 +1297,6 @@ select option { background:#0b0f18; color:var(--text); }
         </div>
       </div>
 
-      <!-- NOTAS -->
       <div class="panel">
         <div class="panel-title">Notas &amp; História</div>
         <textarea class="notes-field" rows="6" placeholder="Anotações livres, história, contatos, missões..."></textarea>
@@ -1318,7 +1306,6 @@ select option { background:#0b0f18; color:var(--text); }
     </div>
   </div>
 
-  <!-- ─── ÁRVORE ─── -->
   <div class="page" id="page-arvore">
     <canvas id="tree-canvas"></canvas>
     <div id="tree-ui">
@@ -1340,25 +1327,19 @@ select option { background:#0b0f18; color:var(--text); }
     </div>
   </div>
 
-  <!-- ─── REGRAS ─── -->
   <div class="page" id="page-regras"></div>
 
-  <!-- ─── CLASSES ─── -->
   <div class="page" id="page-classes"></div>
 
-  <!-- ─── MAGIAS ─── -->
   <div class="page" id="page-magias"></div>
 
-  <!-- ─── BESTIÁRIO ─── -->
+  <div class="page" id="page-itens"></div>
+
   <div class="page" id="page-bestiario"></div>
 
-  <!-- ─── LORE ─── -->
   <div class="page" id="page-lore"></div>
 
-</div><!-- #main -->
-
-<!-- TOOLTIP (shared) -->
-<div id="tooltip">
+</div><div id="tooltip">
   <div class="tt-class" id="tt-class"></div>
   <div class="tt-name"  id="tt-name"></div>
   <div class="tt-type"  id="tt-type"></div>
@@ -1956,7 +1937,6 @@ requestAnimationFrame(() => {
 });
 </script>
 
-<!-- ══ CONTENT DATA & RENDERERS ══ -->
 <script src="data/rules.js"></script>
 <script src="data/classes.js"></script>
 <script src="data/spells.js"></script>
