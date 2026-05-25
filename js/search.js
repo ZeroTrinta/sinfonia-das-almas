@@ -115,6 +115,19 @@
       });
     });
 
+    // ── ITEMS (Equipamentos e Arsenal) ──
+    (window.ITEMS || []).forEach(it => {
+      idx.push({
+        cat: 'Equipamento',
+        icon: '⚖',
+        title: it.name,
+        sub: it.category + (it.damage && it.damage !== '-' ? ' · Dano: ' + it.damage : '') + (it.defense ? ' · Defesa: ' + it.defense : ''),
+        nav: { tab: 'itens', itemSearch: it.name },
+        keywords: (it.name + ' ' + it.category + ' ' + it.type + ' ' + (it.desc || '') + ' ' + (it.tags || []).join(' ')).toLowerCase(),
+        accent: '#7888a0'
+      });
+    });
+
     return idx;
   }
 
@@ -145,7 +158,7 @@
     <div class="srch-modal">
       <div class="srch-input-row">
         <span class="srch-icon">🔎</span>
-        <input type="text" class="srch-input" id="srch-input" placeholder="Buscar regras, classes, magias, condições…" autocomplete="off" autofocus>
+        <input type="text" class="srch-input" id="srch-input" placeholder="Buscar regras, itens, magias, condições…" autocomplete="off" autofocus>
         <span class="srch-kbd">ESC</span>
       </div>
       <div class="srch-results" id="srch-results"></div>
@@ -183,7 +196,7 @@
     overlay.classList.remove('open');
   }
   function getDefaultResults() {
-    // Show a "suggestions" panel: 3 random per category + tips
+    // Show a "suggestions" panel: random per category + tips
     const groups = {};
     index.forEach(it => {
       const g = it.cat.split(' · ')[0];
@@ -191,7 +204,7 @@
       groups[g].push(it);
     });
     const out = [];
-    ['Regras', 'Classe', 'Magia Arcana', 'Magia Sagrada', 'Condição'].forEach(g => {
+    ['Regras', 'Classe', 'Magia Arcana', 'Equipamento', 'Condição'].forEach(g => {
       const arr = groups[g] || [];
       arr.slice(0, 3).forEach(x => out.push(x));
     });
@@ -286,6 +299,13 @@
           sel.dispatchEvent(new Event('change'));
         }
       }
+      if (nav.itemSearch) {
+        const searchInput = document.getElementById('item-search');
+        if (searchInput) {
+          searchInput.value = nav.itemSearch;
+          searchInput.dispatchEvent(new Event('input'));
+        }
+      }
     }, 380);
   }
 
@@ -349,10 +369,6 @@
 
   // Expose hook for the magia page renderer to wire up
   window.__openSearch = openPalette;
-  // Expose hook for opening a spell by name (consumed by pages.js openSpell — exposed retro)
-  // pages.js exposes openSpell internally; we'll add a thin proxy via the modal flow
-  // by relying on existing card click. Easiest: dispatch a custom event the magia page handles.
-  // We'll add window.__openSpellByName in pages.js.
 
   // Public refresh API
   window.refreshSearchIndex = refreshIndex;
