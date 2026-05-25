@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════
 //  SINFONIA DAS ALMAS — Page Renderers
-//  Renders: Regras, Classes, Magias, Bestiário
+//  Renders: Regras, Classes, Magias, Bestiário, Itens, Lore
 // ═══════════════════════════════════════════════
 
 // Helper: simple markdown-ish inline parser (bold + code + escape)
@@ -77,22 +77,14 @@ function renderRegras() {
 
 function renderBlock(b) {
   switch (b.type) {
-    case 'intro':
-      return `<p class="rule-intro">${fmt(b.text)}</p>`;
-    case 'subtitle':
-      return `<h3 class="rule-subtitle">${fmt(b.text)}</h3>`;
-    case 'para':
-      return `<p class="rule-para">${fmt(b.text)}</p>`;
-    case 'quote':
-      return `<blockquote class="rule-quote">${fmt(b.text)}</blockquote>`;
-    case 'quote-small':
-      return `<blockquote class="rule-quote-small">${fmt(b.text)}</blockquote>`;
-    case 'highlight-formula':
-      return `<div class="formula-box">${fmt(b.text)}</div>`;
-    case 'callout':
-      return `<div class="rule-callout">${fmt(b.text)}</div>`;
-    case 'callout-small':
-      return `<div class="rule-callout small">${fmt(b.text)}</div>`;
+    case 'intro': return `<p class="rule-intro">${fmt(b.text)}</p>`;
+    case 'subtitle': return `<h3 class="rule-subtitle">${fmt(b.text)}</h3>`;
+    case 'para': return `<p class="rule-para">${fmt(b.text)}</p>`;
+    case 'quote': return `<blockquote class="rule-quote">${fmt(b.text)}</blockquote>`;
+    case 'quote-small': return `<blockquote class="rule-quote-small">${fmt(b.text)}</blockquote>`;
+    case 'highlight-formula': return `<div class="formula-box">${fmt(b.text)}</div>`;
+    case 'callout': return `<div class="rule-callout">${fmt(b.text)}</div>`;
+    case 'callout-small': return `<div class="rule-callout small">${fmt(b.text)}</div>`;
     case 'table':
       return `
         <div class="rule-table-wrap">
@@ -228,8 +220,7 @@ function renderBlock(b) {
             </div>
           `).join('')}
         </div>`;
-    default:
-      return '';
+    default: return '';
   }
 }
 
@@ -369,7 +360,7 @@ function renderExtra(extra) {
 }
 
 // ═══════════════════════════════════════════════
-//  MAGIAS PAGE  (Grimório com filtros)
+//  MAGIAS PAGE
 // ═══════════════════════════════════════════════
 let magiasFilters = { type: 'all', circle: 'all', school: 'all', q: '' };
 let openedSpell = null;
@@ -378,8 +369,6 @@ function renderMagias() {
   const page = document.getElementById('page-magias');
   if (!page) return;
   const spells = window.SPELLS || [];
-
-  // collect schools present
   const schools = [...new Set(spells.map(s => s.school))].sort();
 
   page.innerHTML = `
@@ -420,25 +409,19 @@ function renderMagias() {
           <input type="text" class="search-input" id="spell-search" placeholder="Nome ou palavra-chave…">
         </div>
       </div>
-
       <div class="spell-grid" id="spell-grid"></div>
     </div>
   `;
 
-  // Append modal to BODY (escape any transformed ancestor so position:fixed works)
   let modal = document.getElementById('spell-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.className = 'spell-modal';
     modal.id = 'spell-modal';
-    modal.innerHTML = `
-      <div class="spell-modal-backdrop"></div>
-      <div class="spell-modal-card"></div>
-    `;
+    modal.innerHTML = `<div class="spell-modal-backdrop"></div><div class="spell-modal-card"></div>`;
     document.body.appendChild(modal);
   }
 
-  // Wire up filters
   page.querySelectorAll('.pill-row').forEach(row => {
     row.addEventListener('click', e => {
       const btn = e.target.closest('.pill');
@@ -450,21 +433,10 @@ function renderMagias() {
       updateSpellGrid();
     });
   });
-  page.querySelector('#school-select').addEventListener('change', e => {
-    magiasFilters.school = e.target.value;
-    updateSpellGrid();
-  });
-  page.querySelector('#spell-search').addEventListener('input', e => {
-    magiasFilters.q = e.target.value.toLowerCase().trim();
-    updateSpellGrid();
-  });
-
-  // Modal close
+  page.querySelector('#school-select').addEventListener('change', e => { magiasFilters.school = e.target.value; updateSpellGrid(); });
+  page.querySelector('#spell-search').addEventListener('input', e => { magiasFilters.q = e.target.value.toLowerCase().trim(); updateSpellGrid(); });
   modal.querySelector('.spell-modal-backdrop').addEventListener('click', closeSpell);
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeSpell();
-  });
-
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeSpell(); });
   updateSpellGrid();
 }
 
@@ -485,50 +457,33 @@ function updateSpellGrid() {
     return true;
   });
 
-  if (count) {
-    count.textContent = `${filtered.length} ${filtered.length === 1 ? 'magia' : 'magias'}`;
-  }
+  if (count) count.textContent = `${filtered.length} ${filtered.length === 1 ? 'magia' : 'magias'}`;
 
-  // group by circle
   const groups = [1, 2, 3].map(c => ({
-    circle: c,
-    items: filtered.filter(s => s.circle === c)
+    circle: c, items: filtered.filter(s => s.circle === c)
   })).filter(g => g.items.length > 0);
 
   grid.innerHTML = groups.map(g => `
     <div class="spell-group">
       <div class="spell-group-header"><span class="sg-num">${romanize(g.circle)}</span><span class="sg-label">${g.circle}º Círculo</span><span class="sg-count">${g.items.length}</span></div>
-      <div class="spell-cards">
-        ${g.items.map(spellCardHTML).join('')}
-      </div>
+      <div class="spell-cards">${g.items.map(spellCardHTML).join('')}</div>
     </div>
   `).join('') || `<div class="no-results">Nenhuma magia encontrada com esses filtros.</div>`;
 
-  // wire clicks
   grid.querySelectorAll('.spell-card').forEach(card => {
     card.addEventListener('click', () => openSpell(card.dataset.name));
   });
 }
 
 function spellCardHTML(s) {
-  const colors = window.SCHOOL_COLORS || {};
-  const c = colors[s.school] || '#c8972a';
-  const typeChip = s.type === 'divina'
-    ? '<span class="sc-type divine">Sagrada</span>'
-    : '<span class="sc-type arcane">Arcana</span>';
+  const c = (window.SCHOOL_COLORS || {})[s.school] || '#c8972a';
+  const typeChip = s.type === 'divina' ? '<span class="sc-type divine">Sagrada</span>' : '<span class="sc-type arcane">Arcana</span>';
   const brief = (s.desc || '').replace(/\*\*/g, '').replace(/\n.*$/s, '').slice(0, 110) + '…';
   return `
     <div class="spell-card" data-name="${s.name.replace(/"/g, '&quot;')}" style="--school:${c}">
-      <div class="sc-top">
-        <span class="sc-school">${s.school}</span>
-        ${typeChip}
-      </div>
+      <div class="sc-top"><span class="sc-school">${s.school}</span>${typeChip}</div>
       <div class="sc-name">${s.name}</div>
-      <div class="sc-meta">
-        <span class="sc-meta-item">⏱ ${s.cast}</span>
-        <span class="sc-meta-item">⌖ ${s.range}</span>
-        <span class="sc-meta-item">⚡ ${s.cost}</span>
-      </div>
+      <div class="sc-meta"><span class="sc-meta-item">⏱ ${s.cast}</span><span class="sc-meta-item">⌖ ${s.range}</span><span class="sc-meta-item">⚡ ${s.cost}</span></div>
       <div class="sc-brief">${fmt(brief)}</div>
       ${s.tags ? `<div class="sc-tags">${s.tags.map(t => `<span class="sc-tag">${t}</span>`).join('')}</div>` : ''}
     </div>
@@ -536,24 +491,19 @@ function spellCardHTML(s) {
 }
 
 function openSpell(name) {
-  const spells = window.SPELLS || [];
-  const s = spells.find(x => x.name === name);
+  const s = (window.SPELLS || []).find(x => x.name === name);
   if (!s) return;
   openedSpell = s;
   const modal = document.getElementById('spell-modal');
-  const colors = window.SCHOOL_COLORS || {};
-  const c = colors[s.school] || '#c8972a';
+  const c = (window.SCHOOL_COLORS || {})[s.school] || '#c8972a';
   modal.querySelector('.spell-modal-card').innerHTML = `
     <button class="sm-close" aria-label="Fechar">×</button>
     <div class="sm-top" style="--school:${c}">
       <div class="sm-circle">${romanize(s.circle)}</div>
-      <div class="sm-top-text">
-        <div class="sm-school">${s.school} — ${s.type === 'divina' ? 'Sagrada' : 'Arcana'}</div>
-        <h2 class="sm-name">${s.name}</h2>
-      </div>
+      <div class="sm-top-text"><div class="sm-school">${s.school} — ${s.type === 'divina' ? 'Sagrada' : 'Arcana'}</div><h2 class="sm-name">${s.name}</h2></div>
     </div>
     <div class="sm-meta">
-      <div class="sm-meta-row"><span class="sm-mkey">Tempo de Conjuração</span><span class="sm-mval">${s.cast}</span></div>
+      <div class="sm-meta-row"><span class="sm-mkey">Tempo</span><span class="sm-mval">${s.cast}</span></div>
       <div class="sm-meta-row"><span class="sm-mkey">Alcance</span><span class="sm-mval">${s.range}</span></div>
       <div class="sm-meta-row"><span class="sm-mkey">Duração</span><span class="sm-mval">${s.duration}</span></div>
       <div class="sm-meta-row"><span class="sm-mkey">Custo</span><span class="sm-mval">${s.cost}</span></div>
@@ -570,13 +520,10 @@ function closeSpell() {
   if (modal) modal.classList.remove('open');
   openedSpell = null;
 }
-
-function romanize(n) {
-  return ({ 1: 'I', 2: 'II', 3: 'III' })[n] || n;
-}
+function romanize(n) { return ({ 1: 'I', 2: 'II', 3: 'III' })[n] || n; }
 
 // ═══════════════════════════════════════════════
-//  BESTIÁRIO PAGE (placeholder + Invocações)
+//  BESTIÁRIO PAGE
 // ═══════════════════════════════════════════════
 function renderBestiario() {
   const page = document.getElementById('page-bestiario');
@@ -589,57 +536,12 @@ function renderBestiario() {
         <hr class="ficha-divider">
         <p class="classes-lead">As criaturas que habitam este mundo — algumas servem, algumas devoram, algumas pertencem a outros planos.</p>
       </div>
-
       <div class="best-stage">
         <div class="best-stage-glyph">☠</div>
         <h2>O Catálogo ainda dorme</h2>
-        <p>As fichas completas de criaturas, NPCs e antagonistas estão em desenvolvimento. Esta sala foi reservada para abrigá-las assim que o Mestre completar suas anotações.</p>
+        <p>As fichas completas de criaturas, NPCs e antagonistas estão em desenvolvimento.</p>
         <div class="best-categories">
-          <div class="best-cat"><span class="bc-icon">🜂</span><div><div class="bc-name">Bestas</div><div class="bc-sub">Em breve</div></div></div>
-          <div class="best-cat"><span class="bc-icon">⚔</span><div><div class="bc-name">Humanoides</div><div class="bc-sub">Em breve</div></div></div>
-          <div class="best-cat"><span class="bc-icon">☠</span><div><div class="bc-name">Mortos-Vivos</div><div class="bc-sub">Em breve</div></div></div>
-          <div class="best-cat"><span class="bc-icon">✦</span><div><div class="bc-name">Construtos</div><div class="bc-sub">Em breve</div></div></div>
           <div class="best-cat ready"><span class="bc-icon">❉</span><div><div class="bc-name">Invocações</div><div class="bc-sub">Disponíveis abaixo</div></div></div>
-          <div class="best-cat"><span class="bc-icon">◈</span><div><div class="bc-name">Aberrações</div><div class="bc-sub">Em breve</div></div></div>
-        </div>
-      </div>
-
-      <div class="best-invocations">
-        <div class="abilities-title">Invocações Acessíveis</div>
-        <p class="invoc-lead">Criaturas que respondem a magias de 3º Círculo do tipo Conjuração ou Necromancia. Cada uma assume uma das essências escolhidas no momento da invocação.</p>
-
-        <div class="invoc-grid">
-          <div class="invoc-card feerico">
-            <div class="invoc-head"><span class="invoc-glyph">❉</span><h3>Espírito Feérico</h3></div>
-            <div class="invoc-tag">Invocado por: Invocação de Espírito Feérico (3º Círculo — Conjuração)</div>
-            <div class="invoc-essences">
-              <div class="essence"><div class="ess-name">Irado</div><div class="ess-desc">Combate agressivo. Aparência selvagem.</div></div>
-              <div class="essence"><div class="ess-name">Alegre</div><div class="ess-desc">Suporte ao grupo. Aparência luminosa.</div></div>
-              <div class="essence"><div class="ess-name">Ardiloso</div><div class="ess-desc">Controle de campo. Aparência ilusória.</div></div>
-            </div>
-            <div class="invoc-stats">
-              <div class="is-row"><span>Iniciativa</span><strong>Mesma do conjurador (turno após)</strong></div>
-              <div class="is-row"><span>Banimento</span><strong>PV ≤ 0 ou fim da magia</strong></div>
-              <div class="is-row"><span>Controle</span><strong>Comandos verbais (sem gastar ação)</strong></div>
-            </div>
-            <div class="invoc-pending">Bloco de estatísticas completo — em construção.</div>
-          </div>
-
-          <div class="invoc-card morto-vivo">
-            <div class="invoc-head"><span class="invoc-glyph">☠</span><h3>Espírito Morto-Vivo</h3></div>
-            <div class="invoc-tag">Invocado por: Invocação de Espírito Morto-Vivo (3º Círculo — Necromancia)</div>
-            <div class="invoc-essences">
-              <div class="essence"><div class="ess-name">Fantasmagórico</div><div class="ess-desc">Etéreo, atravessa obstáculos leves.</div></div>
-              <div class="essence"><div class="ess-name">Pútrido</div><div class="ess-desc">Putrescente, contaminante.</div></div>
-              <div class="essence"><div class="ess-name">Esquelético</div><div class="ess-desc">Estrutura óssea resistente.</div></div>
-            </div>
-            <div class="invoc-stats">
-              <div class="is-row"><span>Iniciativa</span><strong>Mesma do conjurador (turno após)</strong></div>
-              <div class="is-row"><span>Banimento</span><strong>PV ≤ 0 ou fim da magia</strong></div>
-              <div class="is-row"><span>Controle</span><strong>Comandos verbais (sem gastar ação)</strong></div>
-            </div>
-            <div class="invoc-pending">Bloco de estatísticas completo — em construção.</div>
-          </div>
         </div>
       </div>
     </div>
@@ -647,70 +549,121 @@ function renderBestiario() {
 }
 
 // ═══════════════════════════════════════════════
-//  LORE PAGE (em construção)
+//  ITENS PAGE (A Nova Aba!)
+// ═══════════════════════════════════════════════
+let itensFilters = { category: 'all', q: '' };
+
+function renderItens() {
+  const page = document.getElementById('page-itens');
+  if (!page) return;
+  const items = window.ITEMS || [];
+  
+  // Pegar todas as categorias únicas que criamos
+  const categories = [...new Set(items.map(i => i.category))].sort();
+
+  page.innerHTML = `
+    <div class="magias-wrapper">
+      <div class="magias-header">
+        <div class="ficha-title">Arsenal & Equipamentos</div>
+        <hr class="ficha-divider">
+        <div class="magias-count" id="itens-count"></div>
+      </div>
+
+      <div class="magias-filters">
+        <div class="filter-group">
+          <label>Categoria</label>
+          <select class="school-select" id="item-category-select">
+            <option value="all">Todas as categorias</option>
+            ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="filter-group grow">
+          <label>Buscar Equipamento</label>
+          <input type="text" class="search-input" id="item-search" placeholder="Nome do item ou propriedade...">
+        </div>
+      </div>
+
+      <div class="spell-grid" id="item-grid"></div>
+    </div>
+  `;
+
+  // Adicionar eventos aos filtros
+  page.querySelector('#item-category-select').addEventListener('change', e => {
+    itensFilters.category = e.target.value;
+    updateItemGrid();
+  });
+  page.querySelector('#item-search').addEventListener('input', e => {
+    itensFilters.q = e.target.value.toLowerCase().trim();
+    updateItemGrid();
+  });
+
+  updateItemGrid();
+}
+
+function updateItemGrid() {
+  const items = window.ITEMS || [];
+  const grid = document.getElementById('item-grid');
+  const count = document.getElementById('itens-count');
+  if (!grid) return;
+
+  const filtered = items.filter(i => {
+    if (itensFilters.category !== 'all' && i.category !== itensFilters.category) return false;
+    if (itensFilters.q) {
+      const hay = (i.name + ' ' + i.desc + ' ' + (i.tags || []).join(' ')).toLowerCase();
+      if (!hay.includes(itensFilters.q)) return false;
+    }
+    return true;
+  });
+
+  if (count) {
+    count.textContent = `${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'}`;
+  }
+
+  // O itemCardHTML usa uma classe item-card extra que vamos criar no CSS
+  grid.innerHTML = filtered.map(itemCardHTML).join('') || `<div class="no-results">Nenhum item encontrado.</div>`;
+}
+
+function itemCardHTML(i) {
+  const brief = (i.desc || '').replace(/\*\*/g, '');
+  return `
+    <div class="spell-card item-card" style="--school:#7888a0; cursor: default; transform: none; box-shadow: none;">
+      <div class="sc-top">
+        <span class="sc-school" style="color:var(--gold)">${i.category}</span>
+        <span class="sc-type" style="background:rgba(200,151,42,0.1);color:var(--gold-light)">${i.type}</span>
+      </div>
+      <div class="sc-name" style="color:#fff">${i.name}</div>
+      <div class="sc-meta" style="justify-content: flex-start; gap: 12px; flex-wrap: wrap;">
+        ${i.damage && i.damage !== '-' ? `<span class="sc-meta-item">⚔ ${i.damage}</span>` : ''}
+        ${i.defense ? `<span class="sc-meta-item">🛡 ${i.defense}</span>` : ''}
+        <span class="sc-meta-item">⚖ ${i.weight}</span>
+        <span class="sc-meta-item">💰 ${i.price}</span>
+      </div>
+      <div class="sc-brief" style="margin-top: 10px;">${fmt(brief)}</div>
+      ${i.tags ? `<div class="sc-tags" style="margin-top: 14px;">${i.tags.map(t => `<span class="sc-tag" style="border-color:rgba(200,151,42,0.3)">${t}</span>`).join('')}</div>` : ''}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+//  LORE PAGE
 // ═══════════════════════════════════════════════
 function renderLore() {
   const page = document.getElementById('page-lore');
   if (!page) return;
-
-  const sections = [
-    { glyph: '◉', title: 'Cosmologia', desc: 'Os planos da existência, o tecido da realidade e o lugar das almas dentro dele.' },
-    { glyph: '♛', title: 'Povos & Culturas', desc: 'As linhagens humanas, as raças místicas e as civilizações que ergueram e ruíram impérios.' },
-    { glyph: '☼', title: 'Deuses & Panteão', desc: 'As divindades que recebem fé, as que foram esquecidas e as que continuam observando em silêncio.' },
-    { glyph: '⛰', title: 'Mapa & Geografia', desc: 'Reinos, fronteiras, ruínas e os locais onde a Corrupção da Alma vaza para o mundo.' },
-    { glyph: '✦', title: 'O Despertar da Alma', desc: 'A origem do sistema mágico, os primeiros corrompidos e como o Coração se tornou medida da existência.' },
-    { glyph: '✸', title: 'Linha do Tempo', desc: 'Os eventos que moldaram a era atual — as Grandes Quedas, as Guerras Místicas e os pactos esquecidos.' },
-    { glyph: '✶', title: 'Facções & Ordens', desc: 'Guildas, cultos, casas nobres e seitas que disputam o destino das almas.' },
-    { glyph: '☉', title: 'Lendas & Mitos', desc: 'Os relatos que crianças sussurram, e que sábios temem repetir em voz alta.' }
-  ];
-
   page.innerHTML = `
     <div class="lore-wrapper">
       <div class="lore-hero">
-        <div class="lore-hero-glyph">✺</div>
-        <h1>Lore</h1>
-        <div class="lore-status">
-          <span class="pulse-dot"></span>
-          Em construção
-        </div>
-        <p class="lore-intro">
-          O mundo da Sinfonia das Almas se desenrola ao redor de um coração — uma culminação de tudo o que somos. Os pergaminhos que descrevem este universo ainda estão sendo redigidos. Volte em breve para conhecer cosmologia, povos, deuses, e os eventos que moldaram a era atual.
-        </p>
+        <div class="lore-hero-glyph">✺</div><h1>Lore</h1>
+        <div class="lore-status"><span class="pulse-dot"></span>Em construção</div>
       </div>
-
-      <div class="lore-divider">
-        <div class="lhd-line"></div>
-        <span class="lhd-gem">✦</span>
-        <div class="lhd-line"></div>
-      </div>
-
-      <div class="lore-sections-title">Capítulos previstos</div>
-      <div class="lore-cards">
-        ${sections.map(s => `
-          <div class="lore-card">
-            <div class="lc-glyph">${s.glyph}</div>
-            <h3>${s.title}</h3>
-            <p>${s.desc}</p>
-            <div class="lc-pending">A redigir</div>
-          </div>
-        `).join('')}
-      </div>
-
-      <blockquote class="lore-quote">
-        "Quase todo ser tem alma e, se tem uma alma, tem um coração — a culminação do seu ser. Mas o coração oscila e pode variar, e por isso existe um cabo de guerra em se manter bom, mau ou neutro."
-        <span class="lore-quote-attr">Prólogo · Sinfonia das Almas</span>
-      </blockquote>
     </div>
   `;
 }
 
 // ═══════════════════════════════════════════════
-//  INIT
+//  INIT GLOBALS
 // ═══════════════════════════════════════════════
-
-// Expose for global search to deep-link into
 window.__openSpellByName = function(name) {
-  // Make sure we're on the magias tab (or about to be), then open
   setTimeout(() => openSpell(name), 50);
 };
 
@@ -719,5 +672,6 @@ window.initContentPages = function() {
   renderClasses();
   renderMagias();
   renderBestiario();
+  renderItens();  // <-- Chamando a nova aba aqui!
   renderLore();
 };
