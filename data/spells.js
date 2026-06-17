@@ -158,6 +158,19 @@ window.SPELLS = [
   },
 
   // ═══════════════════════════════════════════════
+  {
+    name: "Raio de Gelo", type: "arcana", circle: 1, school: "Evocação",
+    cast: "1 Ação Inicial", range: "18m (12q)", duration: "Instantânea", cost: "10 PE",
+    tags: ["dano", "gelo", "debuff"],
+    desc: "Um feixe gélido de luz azul-esbranquiçada dispara violentamente em direção a uma criatura dentro do alcance. Faça um teste de acerto místico (INT + MIS) contra a Defesa do alvo.\\n\\n• **Em caso de acerto:** o alvo sofre **1d8 de dano de gelo** + o Valor Fixo do seu Conduíte Arcano equipado (ou apenas **1d8** de dano bruto sem conduíte).\\n• **Congelamento:** o frio extremo reduz o deslocamento do alvo em **3m (2q)** até o início do próximo turno dele."
+  },
+  {
+    name: "Lasca Mental", type: "arcana", circle: 1, school: "Encantamento",
+    cast: "1 Ação Inicial", range: "18m (12q)", duration: "1 rodada", cost: "10 PE",
+    tags: ["dano", "debuff"],
+    desc: "Você finca uma farpa desorientadora de energia psíquica na mente de uma criatura visível dentro do alcance. O alvo realiza um teste de **Vontade** contra o seu ND Místico.\\n\\n• **Em caso de falha:** sofre **1d6 de dano psíquico** + o Valor Fixo do seu Conduíte Arcano equipado (ou apenas **1d6** bruto sem conduíte).\\n• **Foco Estilhaçado:** a dor faz o alvo **subtrair 1d4** do próximo teste de perícia (Fortitude, Reflexos ou Vontade) que realizar até o fim do próximo turno dele.\\n• **Em caso de sucesso:** sofre apenas o dano normalmente."
+  },
+
   //  MAGIAS ARCANAS — 2º CÍRCULO
   // ═══════════════════════════════════════════════
   {
@@ -489,6 +502,24 @@ window.SPELLS = [
     cast: "1 Ação Inicial", range: "Pessoal (Esfera de 9m de raio)", duration: "Até 1 minuto / Concentração", cost: "20 PE",
     tags: ["buff", "debuff", "área"],
     desc: "Você entoa um cântico sagrado que distorce as probabilidades a favor de sua causa. Uma esfera invisível de 9m de raio se expande a partir de você e se move junto com seus passos.\\n\\n• **Favorecimento Aliado:** todos os aliados contidos na área recebem **+2 de bônus fixo** em todas as rolagens de ataque e testes de perícia.\\n• **Punição Inimiga:** todos os inimigos contidos na área sofrem **-2 de penalidade fixa** em seus ataques e testes de perícia enquanto permanecerem dentro do raio."
+  },
+  {
+    name: "Consagrar", type: "divina", circle: 2, school: "Transmutação",
+    cast: "1 minuto", range: "Pessoal (raio de 9m / 6q)", duration: "1 hora", cost: "20 PE",
+    tags: ["área", "buff", "proteção"],
+    desc: "Você ajoelha, pronuncia uma longa oração e infunde o espaço ao redor com a presença sagrada, transformando o local em território abençoado.\\n\\n• **Mortos-vivos** que iniciarem o turno na área testam **Fortitude** contra seu ND ou sofrem **1d8 de dano de Luz**.\\n• **Aliados** na área recebem **+2 em testes de Força de Vontade ou Fortitude**.\\n• **Marca Visível:** símbolos dourados sutis surgem no solo e paredes, visíveis apenas com Detectar Alinhamento Espiritual ou visão mágica equivalente.\\n• **Limitação:** apenas **uma** zona consagrada ativa por vez; conjurar novamente encerra a anterior."
+  },
+  {
+    name: "Punição Divina", type: "divina", circle: 2, school: "Evocação",
+    cast: "1 Ação Inicial", range: "18m (12q)", duration: "Instantânea", cost: "20 PE",
+    tags: ["dano", "luz"],
+    desc: "Você estende a mão e um clarão de luz sagrada desce em linha reta sobre um inimigo, carregado pela ira concentrada da sua fé.\\n\\n• **Ataque Sagrado:** realize um ataque de Conjuração Mística à distância contra a Defesa do alvo.\\n• **Impacto Radiante:** em caso de acerto, o alvo sofre **3d10 + Valor Fixo do Conduíte Sagrado** de dano de Luz.\\n• **Flagelo dos Impuros:** se o alvo for morto-vivo, infernal ou entidade caótica, o dano sobe para **4d10 + Valor Fixo do Conduíte Sagrado** e ele testa **Fortitude** contra seu ND ou fica **Atordoado** até o fim do próximo turno dele."
+  },
+  {
+    name: "Aspersio", type: "divina", circle: 2, school: "Transmutação",
+    cast: "1 Ação Parcial", range: "Toque", duration: "Até 10 minutos (10 rodadas)", cost: "20 PE",
+    tags: ["buff", "luz", "combate"],
+    desc: "A arma de um aliado passa a brilhar com uma luz sagrada tênue, tornando cada golpe uma sentença divina.\\n\\n• **Atributo Sagrado:** a arma causa dano de Luz em vez do dano original, ignorando resistências naturais de mortos-vivos e infernais.\\n• **Bênção do Golpe:** uma vez por rodada, ao acertar com a arma consagrada, o portador rola **1d6 de dano de Luz adicional** sem custo.\\n• **Limitação:** apenas uma arma consagrada por vez."
   }
 ];
 

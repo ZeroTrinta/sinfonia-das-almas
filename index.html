@@ -902,6 +902,8 @@ select option { background:#0b0f18; color:var(--text); }
 .class-tab[data-class="arqueiro"].active::after { background:#58c858; }
 .class-tab[data-class="mago"].active      { border-color:#9060e8; color:#c090ff; }
 .class-tab[data-class="mago"].active::after { background:#9060e8; }
+.class-tab[data-class="sacerdote"].active { border-color:#c8972a; color:#ffe9a0; }
+.class-tab[data-class="sacerdote"].active::after { background:#f0c060; }
 
 #pts-panel {
   margin-left: auto;
@@ -1094,10 +1096,10 @@ select option { background:#0b0f18; color:var(--text); }
       </div>
 
       <div class="home-stats">
-        <div class="hs-item"><div class="hs-num">8</div><div class="hs-lbl">Seções de Regras</div></div>
+        <div class="hs-item"><div class="hs-num">10</div><div class="hs-lbl">Seções de Regras</div></div>
         <div class="hs-item"><div class="hs-num">5</div><div class="hs-lbl">Classes</div></div>
-        <div class="hs-item"><div class="hs-num">54</div><div class="hs-lbl">Magias</div></div>
-        <div class="hs-item"><div class="hs-num">24</div><div class="hs-lbl">Condições</div></div>
+        <div class="hs-item"><div class="hs-num">83</div><div class="hs-lbl">Magias</div></div>
+        <div class="hs-item"><div class="hs-num">25</div><div class="hs-lbl">Condições</div></div>
       </div>
     </div>
 
@@ -1127,6 +1129,7 @@ select option { background:#0b0f18; color:var(--text); }
                 <option value="">— escolha —</option>
                 <option>Guerreiro</option><option>Gatuno</option>
                 <option>Arqueiro</option><option>Mago</option>
+                <option>Sacerdote</option>
               </select>
             </div>
           </div>
@@ -1315,6 +1318,7 @@ select option { background:#0b0f18; color:var(--text); }
         <div class="class-tab" data-class="gatuno">Gatuno</div>
         <div class="class-tab" data-class="arqueiro">Arqueiro</div>
         <div class="class-tab" data-class="mago">Mago</div>
+        <div class="class-tab" data-class="sacerdote">Sacerdote</div>
         <div id="pts-panel" style="margin-left:auto;">
           <div class="pl">Pontos Gastos</div>
           <div class="pv" id="pts-display">0</div>
@@ -1558,6 +1562,7 @@ const CLASSES = {
   gatuno:   { label:'Gatuno',    color:'#40b8c8', glow:'#80e8f8', cx: 500, cy:-100 },
   arqueiro: { label:'Arqueiro',  color:'#58c858', glow:'#90f890', cx:-500, cy: 300 },
   mago:     { label:'Mago',      color:'#9060e8', glow:'#c090ff', cx: 500, cy: 300 },
+  sacerdote:{ label:'Sacerdote', color:'#f0c060', glow:'#ffe9a0', cx:   0, cy: 820 },
 };
 
 const NODES=[
@@ -1633,6 +1638,19 @@ const NODES=[
   {id:'m_necro1',label:'Escola: Necromancia',type:'major',cls:'mago',x:500,y:580,cost:1,desc:'Necromancia com duração estendida.'},
   {id:'m_conj1',label:'Escola: Conjuração',type:'major',cls:'mago',x:660,y:580,cost:1,desc:'Conjuração custa -5 PE.'},
   {id:'m_transmut',label:'Escola: Transmutação',type:'keystone',cls:'mago',x:840,y:460,cost:2,desc:'Transmutação concede +1 passo no dado de atributo.'},
+  // SACERDOTE
+  {id:'s_start',label:'Despertar do Sacerdote',type:'start',cls:'sacerdote',x:0,y:760,cost:0,desc:'Você canaliza a fé como força viva.'},
+  {id:'s_simbolos',label:'Perícia com Símbolos Sagrados',type:'major',cls:'sacerdote',x:-180,y:760,cost:1,desc:'Rosários, símbolos e relíquias sem penalidade.'},
+  {id:'s_fe1',label:'Fé Expandida I',type:'minor',cls:'sacerdote',x:-360,y:760,cost:1,desc:'+10 PE máximos.'},
+  {id:'s_fe2',label:'Fé Expandida II',type:'minor',cls:'sacerdote',x:-480,y:720,cost:1,desc:'+10 PE. Total: +20.'},
+  {id:'s_fe3',label:'Fé Expandida III',type:'minor',cls:'sacerdote',x:-480,y:800,cost:1,desc:'+10 PE. Total: +30.'},
+  {id:'s_dom1',label:'Domínio Sagrado NH1',type:'major',cls:'sacerdote',x:0,y:920,cost:1,desc:'6 magias Sagradas de 1º Círculo.'},
+  {id:'s_dom2',label:'Domínio Sagrado NH4',type:'major',cls:'sacerdote',x:-160,y:920,cost:1,desc:'Desbloqueie magias Sagradas de 2º Círculo.'},
+  {id:'s_dom3',label:'Domínio Sagrado NH8',type:'keystone',cls:'sacerdote',x:-320,y:920,cost:2,desc:'Ápice. Desbloqueie o 3º Círculo Sagrado.'},
+  {id:'s_lex',label:'Lex Divina',type:'major',cls:'sacerdote',x:180,y:920,cost:1,desc:'15 PE: alvo testa Vontade ou fica Silenciado.'},
+  {id:'s_kyrie',label:'Kyrie Eleison',type:'major',cls:'sacerdote',x:180,y:760,cost:1,desc:'20 PE: escudo de PVT = dado de CAR + 15 a um aliado.'},
+  {id:'s_magnificat',label:'Magnificat',type:'keystone',cls:'sacerdote',x:360,y:760,cost:2,desc:'25 PE: aura que cura 5 PE/turno aos aliados por 1 min.'},
+  {id:'s_exorcizar',label:'Exorcizar',type:'major',cls:'sacerdote',x:360,y:920,cost:1,desc:'20 PE: Luz devastadora contra mortos-vivos.'},
 ];
 
 const EDGES=[
@@ -1660,6 +1678,10 @@ const EDGES=[
   ['m_conduite','m_recup'],['m_recup','m_recup2'],['m_recup','m_recup3'],
   ['m_conduite','m_evoc1'],['m_evoc1','m_transmut'],
   ['m_mente','m_necro1'],['m_necro1','m_conj1'],
+  ['center','s_start'],
+  ['s_start','s_simbolos'],['s_simbolos','s_fe1'],['s_fe1','s_fe2'],['s_fe1','s_fe3'],
+  ['s_start','s_dom1'],['s_dom1','s_dom2'],['s_dom2','s_dom3'],['s_dom1','s_lex'],
+  ['s_start','s_kyrie'],['s_kyrie','s_magnificat'],['s_magnificat','s_exorcizar'],
 ];
 
 // ═══════════════════════════════════════════════
@@ -1941,6 +1963,7 @@ requestAnimationFrame(() => {
 <script src="data/classes.js"></script>
 <script src="data/spells.js"></script>
 <script src="data/items.js"></script>
+<script src="data/bestiary.js"></script>
 <script src="js/pages.js"></script>
 <script src="js/dice-roller.js"></script>
 <script src="js/reference-card.js"></script>

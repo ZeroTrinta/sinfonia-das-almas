@@ -461,6 +461,132 @@ window.RULES_SECTIONS = [
   },
 
   {
+    id: "combate",
+    title: "Combate",
+    glyph: "⚔",
+    blocks: [
+      { type: "intro", text: "Combate é o momento em que a conversa acaba e as almas se provam. O Mestre descreve a cena, os jogadores descrevem suas intenções, e os dados decidem o destino." },
+      { type: "subtitle", text: "Iniciando o Combate" },
+      { type: "para", text: "Quando o conflito eclode, define-se quem age primeiro. A Iniciativa é um valor fixo — não se rola — calculado na criação do personagem." },
+      { type: "highlight-formula", text: "Iniciativa = metade do Dado de Agilidade (arredondado para baixo)" },
+      { type: "callout-small", text: "Os participantes agem em ordem decrescente de Iniciativa. Empate entre jogador e inimigo: o jogador age primeiro. Empate entre jogadores: eles decidem. A Iniciativa não muda durante o combate." },
+      { type: "subtitle", text: "Estrutura do Turno" },
+      { type: "rule-list", items: [
+        { label: "Ação Inicial", text: "A ação principal: atacar, conjurar, usar uma habilidade poderosa, realizar uma manobra ou interagir de forma significativa com o ambiente." },
+        { label: "Ação Parcial", text: "Uma ação secundária e mais limitada: habilidades menores, conjurações rápidas, interações simples." },
+        { label: "Movimento", text: "Deslocar-se até o limite do seu deslocamento (padrão 9m). Pode ser dividido antes e depois de outra ação." },
+        { label: "Reação", text: "Executada fora do seu turno, em resposta a um gatilho. Renova-se no início de cada um dos seus turnos." }
+      ] },
+      { type: "callout-small", text: "Uma Ação Inicial pode ser convertida voluntariamente em uma Ação Parcial adicional, mas o inverso não é possível. Falar, gritar, soltar um objeto ou gesticular não custam ação." },
+      { type: "subtitle", text: "Realizando um Ataque" },
+      { type: "para", text: "Declare o alvo e a perícia utilizada, role os dois dados da perícia e some o modificador. Compare o total com a Defesa passiva do alvo." },
+      { type: "highlight-formula", text: "Dado A + Dado B + Modificador de Perícia ≥ Defesa do Alvo" },
+      { type: "table", cols: ["Perícia", "Atributos", "Uso"], rows: [
+        ["Armas Brancas", "POD+AGI ou AGI+AGI", "Espadas, machados, lanças"],
+        ["Briga", "POD+AGI ou POD+POD", "Combate desarmado"],
+        ["Armas de Fogo", "AGI+AGI", "Pistolas, rifles, bestas, arcos"],
+        ["Conjuração Mística (Arcana)", "MIS+MIS", "Ataques mágicos arcanos"],
+        ["Conjuração Mística (Divina)", "CAR+INT", "Ataques mágicos divinos"]
+      ] },
+      { type: "subtitle", text: "Dano, Resistências e Redução" },
+      { type: "rule-list", items: [
+        { label: "Resistência", text: "O alvo sofre metade do dano daquele tipo." },
+        { label: "Vulnerabilidade", text: "O alvo sofre o dobro do dano daquele tipo." },
+        { label: "Imunidade", text: "O alvo não sofre dano algum daquele tipo." },
+        { label: "Redução de Dano (RD)", text: "Subtraia o valor da RD antes de aplicar o dano. O dano mínimo após RD é sempre 1." }
+      ] },
+      { type: "subtitle", text: "Sucessos Críticos" },
+      { type: "para", text: "Quando os dois dados de um teste de ataque mostram o mesmo número e ambos estão acima de 6, algo extraordinário acontece." },
+      { type: "rule-list", items: [
+        { label: "Acerto Automático", text: "O ataque acerta, ignorando a Defesa do alvo." },
+        { label: "Dano Dobrado", text: "Role o dano normalmente e dobre o resultado." },
+        { label: "Oportunidade", text: "O atacante ganha um efeito extra à escolha do jogador e aprovado pelo Mestre: aplicar uma condição, reposicionar-se, intimidar a cena, recuperar PE, etc." }
+      ] },
+      { type: "callout-small", text: "Não existem falhas críticas — mas falhar repetidamente gera frustração e expõe a alma a riscos." },
+      { type: "subtitle", text: "Ataques de Oportunidade" },
+      { type: "para", text: "Quando uma criatura sai do alcance corpo-a-corpo de um inimigo sem usar a ação Desengajar, esse inimigo pode gastar sua Reação para um ataque imediato, seguindo as regras normais." },
+      { type: "subtitle", text: "Cobertura" },
+      { type: "rule-list", items: [
+        { label: "Leve", text: "Móveis, arbustos, ângulo ruim: +2 na Defesa contra ataques diretos." },
+        { label: "Pesada", text: "Paredes, pilares, barricadas: +5 na Defesa contra ataques diretos." },
+        { label: "Total", text: "Completamente obstruído: não pode ser alvo de ataques diretos. Efeitos de área ainda o atingem." }
+      ] },
+      { type: "subtitle", text: "Ações Especiais de Combate" },
+      { type: "rule-list", items: [
+        { label: "Desengajar", text: "Seu movimento neste turno não provoca Ataques de Oportunidade." },
+        { label: "Esquivar", text: "Até o início do próximo turno, ataques contra você têm Desvantagem e você tem Vantagem em Reflexos. Você não ataca." },
+        { label: "Ajudar", text: "O próximo teste de ataque ou perícia de um aliado adjacente recebe Vantagem." },
+        { label: "Procurar", text: "Teste de Percepção ou Investigação para localizar algo Oculto ou Camuflado." },
+        { label: "Usar Item", text: "Usa um consumível do inventário, gastando Pontos de Inventário." },
+        { label: "Preparar", text: "Declare uma ação e um gatilho. Se o gatilho ocorrer antes do próximo turno, a ação dispara como Reação." }
+      ] },
+      { type: "subtitle", text: "Nas Portas da Morte — O Crepúsculo" },
+      { type: "para", text: "Ao chegar a 0 PV, o personagem entra no Crepúsculo da Morte, o espaço entre a vida e a morte onde só a força da alma o mantém no mundo." },
+      { type: "rule-list", items: [
+        { label: "Inconsciente", text: "Cai inconsciente e não pode realizar nenhuma ação." },
+        { label: "Contagem da Alma", text: "Sua Determinação atual vira o número de turnos que resta antes de morrer." },
+        { label: "Declínio", text: "No início de cada turno no Limiar, perde 1 ponto de Determinação." },
+        { label: "Dano no Limiar", text: "Cada vez que recebe dano, perde mais 1 ponto de Determinação (2 se for crítico), independente do valor." },
+        { label: "Marca da Queda", text: "Todo dano sofrido na Determinação vira Corrupção. Ao atingir o máximo de Corrupção, ganha um Estilhaço da Alma." },
+        { label: "Último Fôlego", text: "Se a Determinação chegar a 1 no Limiar, faça um teste de Força de Vontade contra o ND da tabela. Falhar significa a morte." }
+      ] },
+      { type: "table", cols: ["Teste no Limiar", "ND (Força de Vontade)"], rows: [
+        ["1º", "10"], ["2º", "16"], ["3º", "16"], ["4º", "20"], ["5º", "25"], ["6º", "30"]
+      ] },
+      { type: "quote", text: "Quase todo ser tem alma e, se tem alma, tem um coração — a culminação do seu ser." }
+    ]
+  },
+
+  {
+    id: "descanso",
+    title: "Descanso & Recuperação",
+    glyph: "☾",
+    blocks: [
+      { type: "intro", text: "A jornada é longa e o corpo tem limites. O descanso não é fraqueza — é o que separa os heróis dos mártires." },
+      { type: "subtitle", text: "Descanso Curto" },
+      { type: "para", text: "Algumas horas de respiro entre batalhas. Exige um local minimamente seguro e ao menos 2 horas sem interrupção." },
+      { type: "rule-list", items: [
+        { label: "Vitalidade", text: "Recupera 50% dos PV e 50% dos PE máximos." },
+        { label: "Alívio", text: "Remove condições leves: Enfraquecido, Ofuscado, Caído, Chamuscado e Sangrando." },
+        { label: "Suprimentos", text: "Restaura 2 Pontos de Inventário gastos com consumíveis." },
+        { label: "Limite", text: "Só pode haver um Descanso Curto entre dois Descansos Completos." }
+      ] },
+      { type: "subtitle", text: "Descanso Completo" },
+      { type: "para", text: "Uma noite inteira de sono, refeição e segurança real — nos ermos (área protegida ou hospitalidade amigável) ou em assentamentos (uma estalagem ou abrigo equivalente)." },
+      { type: "rule-list", items: [
+        { label: "Restauração Plena", text: "Recupera todos os PV e todos os PE." },
+        { label: "Limpeza", text: "Remove todas as condições ativas, exceto as causadas por Estilhaço da Alma ou maldições permanentes." },
+        { label: "Equilíbrio", text: "Recupera metade dos pontos de Determinação." },
+        { label: "Inventário", text: "Restaura completamente os Pontos de Inventário." }
+      ] },
+      { type: "callout", text: "O Descanso Completo **não** reduz a Corrupção. A alma descansa, mas as marcas permanecem — Corrupção só cai por meios narrativos: rituais, redenção, magia sagrada ou escolhas do personagem." },
+      { type: "subtitle", text: "Cenas de Descanso" },
+      { type: "para", text: "Durante cada Descanso Completo, cada jogador tem direito a uma Cena de Descanso — um momento livre de interpretação, sem testes nem inimigos. Ao final, escolha um efeito:" },
+      { type: "rule-list", items: [
+        { label: "Formar um Laço", text: "Crie um novo Laço com alguém presente, definindo a Emoção e a Memória que o ancora." },
+        { label: "Aprofundar um Laço", text: "Aumente a Força de um Laço existente em 1 (até 3)." },
+        { label: "Transformar um Laço", text: "Troque a Emoção de um Laço por outra; a Força permanece." },
+        { label: "Momento de Reflexão", text: "Recupera +1 ponto de Determinação além do normal e, se a narrativa justificar, remove 1 ponto de Corrupção." }
+      ] },
+      { type: "subtitle", text: "Laços & Vínculos" },
+      { type: "para", text: "Laços são conexões emocionais — e força real. Quem luta por alguém é mais difícil de quebrar. Cada Laço tem uma Emoção, uma Memória e uma Força." },
+      { type: "table", cols: ["Força", "Nome", "Significado"], rows: [
+        ["1", "Nascente", "Conexão nova, ainda frágil e não testada."],
+        ["2", "Firme", "Relação consolidada por experiências difíceis."],
+        ["3", "Inabalável", "Vínculo que define o personagem; rompê-lo o mudaria."]
+      ] },
+      { type: "rule-list", items: [
+        { label: "Ativar (Nascente)", text: "Uma vez por cena ao agir por esse Laço: Vantagem em um teste da ação." },
+        { label: "Ativar (Firme)", text: "Vantagem no teste + recupera 5 PE." },
+        { label: "Ativar (Inabalável)", text: "Vantagem no teste + 5 PE + 1 ponto de Determinação." },
+        { label: "Proteção pela Conexão", text: "Com um aliado de Laço 2+ presente e consciente, o primeiro ponto de Determinação que perderia na cena é ignorado uma vez." },
+        { label: "Custo de Perder", text: "Perder um Laço por morte ou traição custa Determinação: −1 (Nascente), −2 (Firme), −3 e +1 Corrupção (Inabalável)." }
+      ] },
+      { type: "callout-small", text: "O sistema de Laços é o mais experimental do jogo — pode ser usado como regra opcional. Máximo de 5 Laços ativos, 1 por pessoa." }
+    ]
+  },
+
+  {
     id: "condicoes",
     title: "Glossário de Condições",
     glyph: "❖",
@@ -476,6 +602,7 @@ window.RULES_SECTIONS = [
           { name: "Paralisado", color: "#c84040", desc: "Não pode se mover, falar ou realizar qualquer ação ou reação. O corpo trava completamente." },
           { name: "Incapacitado", color: "#c0584c", desc: "Impossibilitado de realizar ações, reações ou se levantar — geralmente combinado com Caído." },
           { name: "Imobilizado", color: "#b88040", desc: "Deslocamento reduzido a 0. Ainda pode agir, atacar e reagir normalmente." },
+          { name: "Agarrado", color: "#a87038", desc: "Preso por uma criatura ou efeito. Deslocamento reduzido a 0 até se soltar (teste de Atletismo ou Briga contra quem agarra)." },
           { name: "Caído", color: "#a08850", desc: "Prostrado no chão. Para levantar gasta metade do deslocamento. Ataques corpo-a-corpo contra você ganham vantagem." },
           { name: "Enfraquecido", color: "#a06840", desc: "Sofre Desvantagem em rolagens de ataque e em testes de Poder/Agilidade." },
           { name: "Debilitada", color: "#9070d0", desc: "Deslocamento pela metade, -2 Defesa, dado de Agilidade reduzido em 1 passo, sem reações." },

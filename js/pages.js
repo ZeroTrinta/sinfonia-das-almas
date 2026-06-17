@@ -529,21 +529,38 @@ function renderBestiario() {
   const page = document.getElementById('page-bestiario');
   if (!page) return;
 
+  const B = window.BESTIARY || { intro: '', categories: [], types: [] };
+
   page.innerHTML = `
     <div class="bestiario-wrapper">
       <div class="classes-header">
         <div class="ficha-title">Bestiário</div>
         <hr class="ficha-divider">
-        <p class="classes-lead">As criaturas que habitam este mundo — algumas servem, algumas devoram, algumas pertencem a outros planos.</p>
+        <p class="classes-lead">${B.intro}</p>
       </div>
-      <div class="best-stage">
-        <div class="best-stage-glyph">☠</div>
-        <h2>O Catálogo ainda dorme</h2>
-        <p>As fichas completas de criaturas, NPCs e antagonistas estão em desenvolvimento.</p>
-        <div class="best-categories">
-          <div class="best-cat ready"><span class="bc-icon">❉</span><div><div class="bc-name">Invocações</div><div class="bc-sub">Disponíveis abaixo</div></div></div>
-        </div>
+
+      <div class="best-section-title"><span class="bst-line"></span><span class="bst-text">Categorias de Ameaça</span><span class="bst-line"></span></div>
+      <div class="best-cat-grid">
+        ${B.categories.map((c, i) => `
+          <div class="best-cat-card" id="best-cat-${i}" style="--accent:${c.color}">
+            <div class="bcc-glyph">${c.glyph}</div>
+            <div class="bcc-body">
+              <div class="bcc-name">${c.name}</div>
+              <div class="bcc-desc">${c.desc}</div>
+            </div>
+          </div>`).join('')}
       </div>
+
+      <div class="best-section-title"><span class="bst-line"></span><span class="bst-text">Tipos de Criatura</span><span class="bst-line"></span></div>
+      <div class="best-type-grid">
+        ${B.types.map((t, i) => `
+          <div class="best-type-card" id="best-type-${i}">
+            <div class="btc-head"><span class="btc-glyph">${t.glyph}</span><span class="btc-name">${t.name}</span></div>
+            <div class="btc-desc">${t.desc}</div>
+          </div>`).join('')}
+      </div>
+
+      <div class="best-note">As fichas estatísticas individuais — atributos, PV/PE e habilidades de cada criatura — estão em desenvolvimento. Esta seção estabelece a taxonomia que organiza todo o bestiário.</div>
     </div>
   `;
 }

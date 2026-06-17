@@ -128,6 +128,32 @@
       });
     });
 
+    // ── BESTIÁRIO (categorias de ameaça + tipos de criatura) ──
+    if (window.BESTIARY) {
+      (window.BESTIARY.categories || []).forEach((c, i) => {
+        idx.push({
+          cat: 'Categoria de Ameaça',
+          icon: c.glyph || '☠',
+          title: c.name,
+          sub: 'Bestiário · ' + (c.desc || '').slice(0, 60),
+          nav: { tab: 'bestiario', target: 'best-cat-' + i },
+          keywords: (c.name + ' ' + (c.desc || '')).toLowerCase(),
+          accent: c.color || '#c8972a'
+        });
+      });
+      (window.BESTIARY.types || []).forEach((t, i) => {
+        idx.push({
+          cat: 'Tipo de Criatura',
+          icon: '☠',
+          title: t.name,
+          sub: 'Bestiário · ' + (t.desc || '').slice(0, 60),
+          nav: { tab: 'bestiario', target: 'best-type-' + i },
+          keywords: (t.name + ' ' + (t.desc || '')).toLowerCase(),
+          accent: '#9aa0b0'
+        });
+      });
+    }
+
     return idx;
   }
 
