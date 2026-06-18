@@ -128,6 +128,23 @@
       });
     });
 
+    // ── TALENTOS HEROICOS (linha a linha da tabela) ──
+    {
+      const talSec = (window.RULES_SECTIONS || []).find(s => s.id === 'talentos');
+      const talTbl = talSec && talSec.blocks.find(b => b.type === 'table');
+      if (talTbl) talTbl.rows.forEach(r => {
+        idx.push({
+          cat: 'Talento Heroico',
+          icon: '★',
+          title: r[0],
+          sub: r[1] + ' · ' + (r[2] || '').slice(0, 50),
+          nav: { tab: 'regras', target: 'rule-talentos' },
+          keywords: (r.join(' ')).toLowerCase(),
+          accent: '#f0c060'
+        });
+      });
+    }
+
     // ── BESTIÁRIO (categorias de ameaça + tipos de criatura) ──
     if (window.BESTIARY) {
       (window.BESTIARY.categories || []).forEach((c, i) => {

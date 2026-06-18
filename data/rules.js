@@ -248,9 +248,9 @@ window.RULES_SECTIONS = [
       {
         type: "rule-list",
         items: [
-          { label: "Limiar do Desespero", text: "Aumenta em **1 passo** um dado de atributo na cena (d8 → d10 → d12)." },
-          { label: "Rerrolar Dados", text: "Permite rerrolar dados perdidos." },
-          { label: "Força Mística", text: "Adiciona **+5** num teste de perícia." }
+          { label: "Limiar do Desespero", text: "Aumenta em **1 passo** um dado de atributo na cena (d8 → d10 → d12, máx d12)." },
+          { label: "Negar a Sorte", text: "Gasta **1 ponto de Corrupção** para rerrolar qualquer dado e ficar com o novo resultado." },
+          { label: "Força das Sombras", text: "Gasta **1 ponto de Corrupção** para adicionar **+5** a um teste de perícia." }
         ]
       },
       {
@@ -259,7 +259,7 @@ window.RULES_SECTIONS = [
       },
       {
         type: "para",
-        text: "Se a Corrupção vencer o cabo de guerra, você adquire **um nível de Estilhaço da Alma** — uma condição que traz mutações na personalidade e/ou no corpo. Podem ser **benignas ou malignas**, mas sempre vêm com um custo. O cabo se reinicia pendendo agora pelo lado da Corrupção."
+        text: "Se a Corrupção vencer o cabo de guerra, você adquire **um nível de Estilhaço da Alma** — uma condição que traz mutações na personalidade e/ou no corpo. Podem ser **benignas ou malignas**, mas sempre vêm com um custo. Após o Estilhaço, a Corrupção volta a **0** e a Determinação retoma normalmente — sem penalidade automática. Veja a seção **Estilhaços da Alma** para as tabelas completas."
       },
       {
         type: "quote-small",
@@ -344,6 +344,108 @@ window.RULES_SECTIONS = [
         text: "Todo personagem começa no **Nível 5**. A cada nível você ganha **1 Ponto de Habilidade** para investir na árvore da classe. O **Nível de Habilidade (NH)** de uma técnica aumenta dano, alcance ou reduz custo.",
         sub: "Ao atingir o **Nível 20** com base em pré-requisitos, você pode evoluir para uma **Segunda Classe**, reiniciando a contagem e liberando uma nova árvore sem perder o aprendido. Exemplo: Espadachim → Cavaleiro ou Templário."
       }
+    ]
+  },
+
+  {
+    id: "progressao",
+    title: "Progressão & Evolução",
+    glyph: "⇡",
+    blocks: [
+      { type: "intro", text: "A jornada de um herói é medida pelo quanto sua alma cresce. A cada desafio superado, o personagem se aproxima do ápice do seu potencial." },
+      { type: "subtitle", text: "Ganhando Níveis" },
+      { type: "para", text: "Todo personagem começa no **Nível 5**. A progressão é simples e constante: ao final de cada sessão de jogo, todos sobem **1 nível**. Não há contagem de experiência — a evolução acompanha o ritmo da história e o grupo cresce junto." },
+      { type: "callout-small", text: "O Mestre tem a palavra final sobre o que conta como uma sessão completa. Sessões muito curtas ou interrompidas podem ser agrupadas a critério da mesa." },
+      { type: "subtitle", text: "O Que Você Ganha por Nível" },
+      { type: "rule-list", items: [
+        { label: "Ponto de Habilidade", text: "1 ponto para adquirir novas habilidades na árvore da sua classe ou aumentar o NH de técnicas que já possui." },
+        { label: "Recursos Vitais", text: "+1 PV e +1 PE a cada nível conquistado." }
+      ] },
+      { type: "subtitle", text: "Marcos de Poder" },
+      { type: "para", text: "Em três momentos cruciais, além dos ganhos normais de nível, o personagem dá um salto de poder e identidade:" },
+      { type: "table", cols: ["Nível", "Ganho Extra"], rows: [
+        ["10", "Aumento de Atributo: +1 passo num dado (máx d12). Aprimoramento: +1 Grau de Maestria em 2 perícias."],
+        ["15", "Talento Heroico: uma capacidade que transcende a classe, escolhida de uma lista geral disponível a qualquer herói."],
+        ["20", "Aumento de Atributo + Aprimoramento de 2 perícias — e abre-se o caminho para a Segunda Classe."]
+      ] },
+      { type: "callout-small", text: "Aumentar Poder ou Misticismo recalcula a base de PV e PE. A lista completa está na seção **Talentos Heroicos**." },
+      { type: "subtitle", text: "O Despertar da Segunda Classe" },
+      { type: "para", text: "O Nível 20 é um ponto de transição. A Classe Inicial atingiu seu ápice e o personagem pode trilhar uma **Segunda Classe**. A evolução não apaga o passado: você mantém tudo o que aprendeu e desbloqueia uma **nova árvore**, reiniciando a contagem de níveis para essa jornada." },
+      { type: "rule-list", items: [
+        { label: "Investimento na Árvore", text: "Pontos mínimos em habilidades específicas da Classe Inicial. Ex.: um Guerreiro que deseja ser Templário precisa de ao menos 5 pontos em Iniciado em Milagres." },
+        { label: "Talento Heroico", text: "Alguns caminhos exigem um Talento Heroico específico, adquirido no Nível 15." }
+      ] },
+      { type: "callout-small", text: "Quem não cumpre os pré-requisitos não pode trilhar aquela Segunda Classe — o caminho se fecha para quem não se preparou." }
+    ]
+  },
+
+  {
+    id: "talentos",
+    title: "Talentos Heroicos",
+    glyph: "★",
+    blocks: [
+      { type: "intro", text: "No **Nível 15**, o personagem desperta um Talento Heroico — uma capacidade que transcende as fronteiras da sua classe. Talentos não pertencem a nenhuma árvore: são escolhidos desta lista geral, disponível a qualquer herói, e representam um avanço excepcional da alma." },
+      { type: "table", cols: ["Talento", "Origem", "Efeito"], rows: [
+        ["Coração Indômito", "Alma", "Sua Determinação máxima sobe de 10 para 12, e você suporta até 3 Estilhaços antes do ponto final, em vez de 2."],
+        ["Fôlego de Guerra", "Guerreiro", "Seus PV máximos aumentam em +1 por nível de personagem."],
+        ["Lâmina Certeira", "Gatuno", "Contra alvos Desprevenidos, Ocultos ou que ainda não agiram na rodada, seus ataques causam +1 dado de dano."],
+        ["Olhar do Falcão", "Arqueiro", "Seus ataques à distância ignoram cobertura leve e somam +2 de dano fixo."],
+        ["Mente Inesgotável", "Mago", "Como Ação Inicial, gaste metade dos seus PE atuais e ganhe esse mesmo valor em PV temporários (barreira de mana)."],
+        ["Cura Persistente", "Sacerdote", "Um alvo curado por você recebe +5 de cura no início de cada turno dele, por 5 rodadas."]
+      ] },
+      { type: "callout-small", text: "Talentos transcendem a classe: qualquer personagem pode escolher qualquer um, independentemente da sua vocação. Alguns servem ainda como pré-requisito para Segundas Classes." }
+    ]
+  },
+
+  {
+    id: "estilhacos",
+    title: "Estilhaços da Alma",
+    glyph: "✶",
+    blocks: [
+      { type: "quote-small", text: "A cicatriz de uma ruptura que nunca volta a ser o que era." },
+      { type: "intro", text: "Há um ponto sem retorno. Quando a Corrupção consome a alma por inteiro, algo se quebra. Um Estilhaço é uma mutação real — física e espiritual — que reescreve parte de quem o personagem é. Algumas concedem poder, outras são fardos; a maioria é ambas." },
+      { type: "subtitle", text: "Quando um Estilhaço Surge" },
+      { type: "para", text: "Quando a Corrupção atinge **10**, a alma se fragmenta e o personagem adquire **1 Estilhaço**. A Corrupção retorna a **0** e a Determinação volta a subir a partir daí. Não há penalidade automática na Determinação máxima — o peso do Estilhaço está no efeito que ele carrega." },
+      { type: "subtitle", text: "Determinando o Estilhaço" },
+      { type: "para", text: "Role **1d6** para a natureza do Estilhaço, depois role na tabela correspondente — ou crie um próprio com o Mestre." },
+      { type: "table", cols: ["1d6", "Natureza"], rows: [
+        ["1–2", "Maldição — mutação puramente prejudicial."],
+        ["3–4", "Dádiva Sombria — poder real com custo real."],
+        ["5–6", "Bênção Corrompida — rara; a escuridão concede algo útil."]
+      ] },
+      { type: "subtitle", text: "Maldições" },
+      { type: "table", cols: ["1d6", "Estilhaço", "Efeito"], rows: [
+        ["1", "Veias Negras", "Desvantagem em testes sociais com quem não conhece sua condição."],
+        ["2", "Frieza da Alma", "Não pode formar novos Laços enquanto tiver este Estilhaço."],
+        ["3", "Fome Espiritual", "Ao fim do Descanso Completo, role 1d6: com 1, ganha 1 Corrupção."],
+        ["4", "Membro Apodrecido", "Reduz um dado de atributo em 1 passo permanente (mín. d6)."],
+        ["5", "Mente Fragilizada", "Desvantagem em testes de Vontade contra efeitos mentais."],
+        ["6", "Repulsa à Cura", "Curas restauram metade do valor em você."]
+      ] },
+      { type: "subtitle", text: "Dádivas Sombrias" },
+      { type: "table", cols: ["1d6", "Estilhaço", "Efeito"], rows: [
+        ["1", "Garras da Corrupção", "Ataque natural (POD+AGI+8, Trevas). Matar com ele recupera 20 PV e 20 PE."],
+        ["2", "Sangue Venenoso", "Atacante corpo a corpo sofre 15 de Trevas. Você fica Vulnerável a Luz."],
+        ["3", "Vigor Profano", "+3× Dado de Poder em PV. Porém −5 em testes de Reflexos."],
+        ["4", "Olhos da Treva", "Visão no escuro e detecta Camuflados. Dano de Luz contra você impõe desvantagem nos seus ataques por 1 rodada."],
+        ["5", "Força Emprestada", "1×/combate: +1 passo num atributo por cena. Ao usar, ganha 1 Corrupção."],
+        ["6", "Couro Profano", "RD 5 físico. Porém −5 em Fortitude."]
+      ] },
+      { type: "subtitle", text: "Bênçãos Corrompidas" },
+      { type: "table", cols: ["1d6", "Estilhaço", "Efeito"], rows: [
+        ["1", "Resiliência Sombria", "Imune à condição Amedrontado."],
+        ["2", "Segundo Coração", "1×/sessão, ao chegar a 0 PV, sai do Limiar com 1 PV."],
+        ["3", "Mente Fraturada", "Vantagem em Vontade contra controle mental."],
+        ["4", "Ecos de Poder", "Magias e habilidades custam 5 PE a menos (mín. 5)."],
+        ["5", "Instinto Predatório", "+2 de Iniciativa permanente."],
+        ["6", "Imparável", "Ao finalizar um alvo, pode agir novamente (até 2× por cena de combate)."]
+      ] },
+      { type: "subtitle", text: "O Terceiro Estilhaço" },
+      { type: "callout", text: "A alma mortal carrega até **dois** Estilhaços e ainda permanece ela mesma. Mas quando a Corrupção atinge 10 pela **terceira** vez, não há mais alma suficiente para segurar o corpo: o personagem se torna um NPC sob controle permanente do Mestre, um eco distorcido movido apenas pela Corrupção que venceu." },
+      { type: "subtitle", text: "Removendo Estilhaços" },
+      { type: "para", text: "Não existe ritual, magia ou entidade que remova um Estilhaço — a Corrupção transcende o divino, pois é a manifestação de que ações têm consequências. Um Estilhaço só se desfaz por uma jornada de redenção genuína: escolhas e sacrifícios que provem, com atos, que o personagem mudou." },
+      { type: "callout-small", text: "Ninguém se salva sozinho. Laços de Força 3 (Inabalável) são âncoras reais contra a escuridão, e a redenção avança mais quando impulsionada por esses vínculos." },
+      { type: "quote-small", text: "Nenhuma alma está verdadeiramente perdida enquanto houver alguém disposto a lutar por ela." }
     ]
   },
 
