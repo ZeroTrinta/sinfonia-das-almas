@@ -1,0 +1,2 @@
+<script src="js/ficha.js"></script>
+<script src="js/bestiario-ficha.js"></script>

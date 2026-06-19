@@ -7,18 +7,21 @@
 #page-regras,
 #page-classes,
 #page-magias,
-#page-bestiario {
+#page-bestiario,
+#page-itens {
   overflow-y: auto;
   overflow-x: hidden;
 }
 #page-regras::-webkit-scrollbar,
 #page-classes::-webkit-scrollbar,
 #page-magias::-webkit-scrollbar,
-#page-bestiario::-webkit-scrollbar { width: 6px; }
+#page-bestiario::-webkit-scrollbar,
+#page-itens::-webkit-scrollbar { width: 6px; }
 #page-regras::-webkit-scrollbar-thumb,
 #page-classes::-webkit-scrollbar-thumb,
 #page-magias::-webkit-scrollbar-thumb,
-#page-bestiario::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+#page-bestiario::-webkit-scrollbar-thumb,
+#page-itens::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
 
 /* shared section header */
 .classes-header,
@@ -1656,6 +1659,42 @@
   border: 1px dashed rgba(200,151,42,0.18);
   background: rgba(200,151,42,0.02);
 }
+
+/* Fichas de criatura */
+.item-prop-defs { margin-top: 18px; border-top: 1px solid rgba(200,151,42,0.18); padding-top: 14px; }
+.ipd-title { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.ipd { margin-bottom: 10px; }
+.ipd-name { display: block; font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-light); margin-bottom: 2px; }
+.ipd-desc { display: block; font-family: 'EB Garamond', serif; font-size: 14px; color: #cfcabb; line-height: 1.5; }
+.creature-list { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+.creature-card { background: linear-gradient(135deg, var(--panel) 0%, var(--bg) 100%); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 16px 18px; }
+.cc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid rgba(200,151,42,0.12); padding-bottom: 10px; margin-bottom: 10px; }
+.cc-name { font-family: 'Cinzel Decorative', serif; font-size: 19px; color: #fff; }
+.cc-type { font-family: 'EB Garamond', serif; font-style: italic; font-size: 13px; color: var(--silver-dim); margin-left: 10px; }
+.cc-cat { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 3px 10px; white-space: nowrap; }
+.cc-flavor { font-family: 'EB Garamond', serif; font-style: italic; font-size: 14px; color: #c8c4b8; line-height: 1.55; margin-bottom: 12px; }
+.cc-attrs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.cc-attr { font-family: 'Cinzel', serif; font-size: 12px; color: #d8d4c8; background: rgba(200,151,42,0.06); border: 1px solid rgba(200,151,42,0.18); padding: 4px 9px; }
+.cc-attr b { color: var(--gold-light); letter-spacing: 1px; }
+.cc-stats { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.cc-stat { display: flex; flex-direction: column; align-items: center; min-width: 64px; border: 1px solid var(--border); background: #141414; padding: 6px 10px; }
+.cc-stat-k { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--silver-dim); }
+.cc-stat-v { font-family: 'Cinzel Decorative', serif; font-size: 17px; color: #fff; }
+.cc-resist { font-family: 'EB Garamond', serif; font-size: 13.5px; color: #cfcabb; line-height: 1.5; margin-bottom: 12px; }
+.cc-resist-k { color: var(--gold-light); font-weight: bold; }
+.cc-sec-label { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin: 10px 0 6px; }
+.cc-abil { border-left: 2px solid rgba(200,151,42,0.25); padding: 2px 0 6px 10px; margin-bottom: 6px; }
+.cc-abil-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.cc-abil-n { font-family: 'Cinzel', serif; font-size: 13px; color: #e8c87a; }
+.cc-abil-c { font-family: 'EB Garamond', serif; font-size: 11.5px; color: var(--silver-dim); font-style: italic; }
+.cc-abil-d { font-family: 'EB Garamond', serif; font-size: 13.5px; color: #d2cec2; line-height: 1.5; margin-top: 2px; }
+.cc-furia { margin-top: 14px; border: 1px solid #c84068; background: linear-gradient(135deg, rgba(200,64,104,0.08), rgba(200,64,104,0.02)); padding: 12px 14px; }
+.cc-furia-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.cc-furia-tag { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #e87090; }
+.cc-furia-bar { font-family: 'EB Garamond', serif; font-size: 12px; color: var(--silver-dim); }
+.cc-furia-name { font-family: 'Cinzel Decorative', serif; font-size: 16px; color: #ffb0c4; margin-bottom: 5px; }
+.cc-furia-eff { font-family: 'EB Garamond', serif; font-size: 13.5px; color: #e0d4d8; line-height: 1.55; }
+@media (max-width:600px){ .cc-head{flex-direction:column;align-items:flex-start;gap:6px;} }
 
 /* ═══════════════════════════════════════════════
    RESPONSIVE

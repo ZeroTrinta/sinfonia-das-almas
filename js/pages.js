@@ -560,9 +560,49 @@ function renderBestiario() {
           </div>`).join('')}
       </div>
 
-      <div class="best-note">As fichas estatísticas individuais — atributos, PV/PE e habilidades de cada criatura — estão em desenvolvimento. Esta seção estabelece a taxonomia que organiza todo o bestiário.</div>
+      ${(window.CREATURES && window.CREATURES.length) ? `
+      <div class="best-section-title"><span class="bst-line"></span><span class="bst-text">Criaturas</span><span class="bst-line"></span></div>
+      <div class="creature-list">
+        ${window.CREATURES.map((cr, i) => creatureCardHTML(cr, i)).join('')}
+      </div>` : ''}
+
+      <div class="best-note">A taxonomia acima organiza o bestiário; as fichas de criatura abaixo trazem atributos, recursos e habilidades completos. O catálogo seguirá crescendo.</div>
     </div>
   `;
+}
+
+function creatureCardHTML(cr, i) {
+  const CAT_COLORS = { 'Comum': '#7a8a72', 'Elite': '#5a9ad0', 'Chefe': '#d08a30', 'Lendário': '#c84068' };
+  const accent = CAT_COLORS[cr.categoria] || '#c8972a';
+  const A = cr.atributos || {};
+  const attrs = [['POD', A.pod], ['AGI', A.agi], ['INT', A.int], ['CAR', A.car], ['MIS', A.mis]]
+    .map(([k, v]) => `<span class="cc-attr"><b>${k}</b> ${v || '—'}</span>`).join('');
+  const statDefs = [['PV', cr.pv], ['PE', cr.pe], ['Defesa', cr.defesa]];
+  if (cr.ndMistica != null) statDefs.push(['ND Místico', cr.ndMistica]);
+  statDefs.push(['Desloc.', cr.deslocamento != null ? cr.deslocamento + 'm' : '—']);
+  const stats = statDefs.map(([k, v]) => `<div class="cc-stat"><span class="cc-stat-k">${k}</span><span class="cc-stat-v">${v}</span></div>`).join('');
+  const ataques = (cr.ataques || []).map(a => `<div class="cc-abil"><div class="cc-abil-h"><span class="cc-abil-n">${fmt(a.nome)}</span>${a.custo ? `<span class="cc-abil-c">${fmt(a.custo)}</span>` : ''}</div><div class="cc-abil-d">${fmt(a.efeito)}</div></div>`).join('');
+  const habs = (cr.habilidades || []).map(h => `<div class="cc-abil"><div class="cc-abil-h"><span class="cc-abil-n">${fmt(h.nome)}</span></div><div class="cc-abil-d">${fmt(h.efeito)}</div></div>`).join('');
+  const af = cr.almaFuriosa ? `
+    <div class="cc-furia">
+      <div class="cc-furia-top"><span class="cc-furia-tag">✸ Alma Furiosa</span><span class="cc-furia-bar">Barra de Fúria: ${cr.almaFuriosa.barra}</span></div>
+      <div class="cc-furia-name">${fmt(cr.almaFuriosa.nome)}</div>
+      <div class="cc-furia-eff">${fmt(cr.almaFuriosa.efeito)}</div>
+    </div>` : '';
+  return `
+    <div class="creature-card" id="creature-${i}" style="--accent:${accent}">
+      <div class="cc-head">
+        <div class="cc-id"><span class="cc-name">${fmt(cr.nome)}</span><span class="cc-type">${fmt(cr.tipo)}</span></div>
+        <span class="cc-cat">${fmt(cr.categoria)}</span>
+      </div>
+      ${cr.descricao ? `<div class="cc-flavor">${fmt(cr.descricao)}</div>` : ''}
+      <div class="cc-attrs">${attrs}</div>
+      <div class="cc-stats">${stats}</div>
+      ${cr.resistencias ? `<div class="cc-resist"><span class="cc-resist-k">Resistências:</span> ${fmt(cr.resistencias)}</div>` : ''}
+      ${ataques ? `<div class="cc-sec-label">Ataques</div>${ataques}` : ''}
+      ${habs ? `<div class="cc-sec-label">Habilidades</div>${habs}` : ''}
+      ${af}
+    </div>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -614,6 +654,17 @@ function renderItens() {
     updateItemGrid();
   });
 
+  let modal = document.getElementById('item-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'spell-modal';
+    modal.id = 'item-modal';
+    modal.innerHTML = `<div class="spell-modal-backdrop"></div><div class="spell-modal-card"></div>`;
+    document.body.appendChild(modal);
+  }
+  modal.querySelector('.spell-modal-backdrop').addEventListener('click', closeItem);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeItem(); });
+
   updateItemGrid();
 }
 
@@ -636,29 +687,81 @@ function updateItemGrid() {
     count.textContent = `${filtered.length} ${filtered.length === 1 ? 'item' : 'itens'}`;
   }
 
-  // O itemCardHTML usa uma classe item-card extra que vamos criar no CSS
   grid.innerHTML = filtered.map(itemCardHTML).join('') || `<div class="no-results">Nenhum item encontrado.</div>`;
+
+  grid.querySelectorAll('.item-card').forEach(card => {
+    card.addEventListener('click', () => openItem(card.dataset.name));
+  });
 }
 
 function itemCardHTML(i) {
-  const brief = (i.desc || '').replace(/\*\*/g, '');
+  const detail = i.desc ? i.desc : (i.prop && i.prop !== '—' ? i.prop : '');
   return `
-    <div class="spell-card item-card" style="--school:#7888a0; cursor: default; transform: none; box-shadow: none;">
+    <div class="spell-card item-card" data-name="${(i.name || '').replace(/"/g, '&quot;')}" style="--school:#7888a0;">
       <div class="sc-top">
         <span class="sc-school" style="color:var(--gold)">${i.category}</span>
         <span class="sc-type" style="background:rgba(200,151,42,0.1);color:var(--gold-light)">${i.type}</span>
       </div>
       <div class="sc-name" style="color:#fff">${i.name}</div>
       <div class="sc-meta" style="justify-content: flex-start; gap: 12px; flex-wrap: wrap;">
-        ${i.damage && i.damage !== '-' ? `<span class="sc-meta-item">⚔ ${i.damage}</span>` : ''}
+        ${i.damage ? `<span class="sc-meta-item">⚔ ${i.damage}</span>` : ''}
         ${i.defense ? `<span class="sc-meta-item">🛡 ${i.defense}</span>` : ''}
-        <span class="sc-meta-item">⚖ ${i.weight}</span>
+        ${i.valorFixo ? `<span class="sc-meta-item">✦ ${i.valorFixo}</span>` : ''}
+        ${i.pi ? `<span class="sc-meta-item">◈ ${i.pi} PI</span>` : ''}
         <span class="sc-meta-item">💰 ${i.price}</span>
       </div>
-      <div class="sc-brief" style="margin-top: 10px;">${fmt(brief)}</div>
-      ${i.tags ? `<div class="sc-tags" style="margin-top: 14px;">${i.tags.map(t => `<span class="sc-tag" style="border-color:rgba(200,151,42,0.3)">${t}</span>`).join('')}</div>` : ''}
+      ${detail ? `<div class="sc-brief" style="margin-top: 10px;">${fmt(detail)}</div>` : ''}
     </div>
   `;
+}
+
+const ITEM_PROPERTIES = {
+  'Duas Mãos': 'Exige as duas mãos para ser empunhada. Não pode ser usada junto de escudo ou segunda arma.',
+  'Leve': 'Pode ser empunhada com uma mão sem penalidade, liberando a outra para um escudo.',
+  'Dupla Empunhadura': 'Apenas armas com esta propriedade podem ser empunhadas uma em cada mão. Ao atacar com a segunda arma, gasta uma Ação Parcial; o dano é apenas o valor fixo da arma, sem os dados de atributo.',
+  'Arremesso': 'Pode ser lançada como ataque à distância até o alcance indicado. Após o arremesso, a arma precisa ser recuperada — ela não retorna sozinha.',
+  'Recarga': 'Após cada disparo, é necessário gastar a ação indicada (Parcial ou Inicial) para recarregar antes de disparar novamente.',
+  'Veloz': 'Concede +1 na Iniciativa enquanto a arma estiver empunhada.',
+  'Brutal': 'Em caso de Crítico, o ataque causa +5 de dano adicional além do dano dobrado normal.',
+  'Contundente': 'Ignora completamente a RD concedida por armaduras leves.'
+};
+
+function itemSpecialProps(i) {
+  const text = ((i.prop || '') + ' ' + (i.valorFixo || '')).toLowerCase();
+  return Object.keys(ITEM_PROPERTIES).filter(k => text.includes(k.toLowerCase()));
+}
+
+function openItem(name) {
+  const i = (window.ITEMS || []).find(x => x.name === name);
+  if (!i) return;
+  const modal = document.getElementById('item-modal');
+  if (!modal) return;
+  const rows = [['Categoria', i.category], ['Tipo', i.type]];
+  if (i.damage) rows.push(['Dano', i.damage]);
+  if (i.defense) rows.push(['Defesa', i.defense]);
+  if (i.valorFixo) rows.push(['Conduíte', i.valorFixo]);
+  if (i.pi) rows.push(['Custo de Inventário', i.pi + ' PI']);
+  rows.push(['Preço', i.price]);
+  const special = itemSpecialProps(i);
+  modal.querySelector('.spell-modal-card').innerHTML = `
+    <button class="sm-close" aria-label="Fechar">×</button>
+    <div class="sm-top" style="--school:#c8972a">
+      <div class="sm-top-text"><div class="sm-school">${i.category} — ${i.type}</div><h2 class="sm-name">${i.name}</h2></div>
+    </div>
+    <div class="sm-meta">
+      ${rows.map(r => `<div class="sm-meta-row"><span class="sm-mkey">${r[0]}</span><span class="sm-mval">${fmt(String(r[1]))}</span></div>`).join('')}
+    </div>
+    ${i.desc ? `<div class="sm-desc">${fmt(i.desc)}</div>` : ''}
+    ${i.prop && i.prop !== '—' ? `<div class="sm-desc"><strong>Propriedade:</strong> ${fmt(i.prop)}</div>` : ''}
+    ${special.length ? `<div class="item-prop-defs"><div class="ipd-title">Propriedades Especiais</div>${special.map(k => `<div class="ipd"><span class="ipd-name">${k}</span><span class="ipd-desc">${ITEM_PROPERTIES[k]}</span></div>`).join('')}</div>` : ''}
+  `;
+  modal.querySelector('.sm-close').addEventListener('click', closeItem);
+  modal.classList.add('open');
+}
+
+function closeItem() {
+  const modal = document.getElementById('item-modal');
+  if (modal) modal.classList.remove('open');
 }
 
 // ═══════════════════════════════════════════════

@@ -640,6 +640,43 @@ window.RULES_SECTIONS = [
   },
 
   {
+    id: "alma-furiosa",
+    title: "Alma Furiosa",
+    glyph: "✸",
+    blocks: [
+      { type: "intro", text: "Todo grande adversário guarda uma carta na manga. A Alma Furiosa é o trunfo dos chefes — um golpe de virada que se acumula no decorrer da batalha e, quando explode, muda o jogo. É a diferença entre um inimigo difícil e um inimigo inesquecível." },
+      { type: "subtitle", text: "A Barra de Fúria" },
+      { type: "para", text: "Exclusiva de criaturas **Chefe** e **Lendárias**, a Barra de Fúria é um recurso separado dos PV. Ela começa vazia e se enche conforme o combate se arrasta e a pressão aumenta — quanto mais longa a luta, mais perigoso o chefe se torna." },
+      { type: "table", cols: ["Como a Fúria cresce", "Pontos"], rows: [
+        ["Ao início de cada turno do chefe", "+1"],
+        ["Quando o chefe sofre um acerto crítico", "+1"],
+        ["Ao cruzar metade dos PV (uma única vez)", "+2"],
+        ["Quando um aliado ou lacaio do chefe é derrubado", "+2"]
+      ] },
+      { type: "rule-list", items: [
+        { label: "Chefe", text: "A barra enche ao atingir **10 Pontos de Fúria**." },
+        { label: "Lendário", text: "A barra enche ao atingir **8 Pontos de Fúria** — e Lendários costumam despertar mais de uma vez ao longo das fases do combate." }
+      ] },
+      { type: "subtitle", text: "O Despertar" },
+      { type: "rule-list", items: [
+        { label: "Disparo Gratuito", text: "Ao encher a barra, no início do próximo turno o chefe dispara sua Alma Furiosa **sem gastar ação**." },
+        { label: "Reinício", text: "A barra zera e volta a encher. Um chefe resistente pode despertar a Fúria várias vezes numa mesma batalha." },
+        { label: "Inabalável", text: "Durante o turno do disparo, o chefe fica **imune a condições de controle**. Ninguém interrompe o golpe." },
+        { label: "Timing do Mestre", text: "O Mestre pode segurar o disparo até o início do próximo turno do chefe, reservando-o para o momento mais dramático." }
+      ] },
+      { type: "subtitle", text: "A Alma Furiosa" },
+      { type: "para", text: "O efeito em si é **livre**: cada chefe tem sua própria Alma Furiosa, criada pelo Mestre ao montar a criatura. Não há lista fechada — os moldes abaixo servem apenas como ponto de partida para a imaginação." },
+      { type: "table", cols: ["Molde", "Inspiração"], rows: [
+        ["Cataclismo", "Dano bruto em área, devastador. Ex.: todos em 9m sofrem 4d12 + atributo do chefe; metade com um teste de Reflexos contra o ND dele."],
+        ["Sentença", "Controle pesado. Ex.: aplica Atordoado, Amedrontado ou Imobilizado em área por 1–2 rodadas, virando o ritmo a favor do chefe."],
+        ["Juízo Final", "Dano e controle juntos — o pacote completo. Raro, reservado a Lendários ou ao clímax de uma campanha."]
+      ] },
+      { type: "callout", text: "Os moldes são trampólins, não gaiolas. A melhor Alma Furiosa é a que conta a história daquele chefe específico — invente livremente e deixe a criatividade crescer junto com a campanha." },
+      { type: "quote-small", text: "Quando a alma de um monstro arde, o chão lembra." }
+    ]
+  },
+
+  {
     id: "descanso",
     title: "Descanso & Recuperação",
     glyph: "☾",
